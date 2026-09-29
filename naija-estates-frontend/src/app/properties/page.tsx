@@ -52,7 +52,11 @@ export default function PropertiesPage() {
         <Link href="/" className="text-xl font-bold tracking-widest uppercase hover:opacity-50 transition-opacity">
           Naija<span className="font-light">Spaces</span>
         </Link>
-        <div className="flex gap-6 text-sm font-medium tracking-widest uppercase items-center">
+        <div className="flex gap-4 md:gap-6 text-xs md:text-sm font-medium tracking-widest uppercase items-center">
+          <Link href="/login" className="text-gray-500 hover:text-white transition-all">
+            Agent Login
+          </Link>
+          <div className="h-4 w-px bg-white/20 hidden md:block"></div>
           <button 
             onClick={() => setViewMode('list')}
             className={`transition-all ${viewMode === 'list' ? 'border-b border-white pb-1' : 'text-gray-500 hover:text-white'}`}

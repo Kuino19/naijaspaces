@@ -55,9 +55,15 @@ export default function PropertyDetailsPage() {
         <Link href="/" className="text-xl font-bold tracking-widest uppercase hover:opacity-50 transition-opacity">
           Naija<span className="font-light">Spaces</span>
         </Link>
-        <Link href="/properties" className="flex items-center gap-3 text-xs tracking-widest uppercase hover:opacity-50 transition-opacity border-b border-white/30 pb-1">
-          <ArrowLeft className="h-4 w-4" /> Return to Portfolio
-        </Link>
+        <div className="flex items-center gap-6">
+          <Link href="/login" className="text-xs tracking-widest uppercase text-gray-500 hover:text-white transition-all hidden md:block">
+            Agent Login
+          </Link>
+          <div className="h-4 w-px bg-white/20 hidden md:block"></div>
+          <Link href="/properties" className="flex items-center gap-3 text-xs tracking-widest uppercase hover:opacity-50 transition-opacity border-b border-white/30 pb-1">
+            <ArrowLeft className="h-4 w-4" /> Return to Portfolio
+          </Link>
+        </div>
       </header>
 
       <main className="w-full">
