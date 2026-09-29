@@ -13,7 +13,7 @@ export default function PropertiesPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/properties")
+    fetch("/api/properties")
       .then(res => res.json())
       .then(data => {
         setProperties(data);
