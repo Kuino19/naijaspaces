@@ -6,26 +6,28 @@ import Link from "next/link";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const router = useRouter();
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
     try {
-      const { data, error } = await authClient.signIn.email({
+      const { data, error } = await authClient.signUp.email({
         email,
         password,
+        name,
       });
 
       if (error) {
-        throw new Error(error.message || "Login failed");
+        throw new Error(error.message || "Registration failed");
       }
 
       router.push("/dashboard");
@@ -47,14 +49,25 @@ export default function LoginPage() {
         </Link>
       </header>
 
-      <main className="flex-1 flex items-center justify-center p-6">
+      <main className="flex-1 flex items-center justify-center p-6 py-12">
         <div className="w-full max-w-md bg-[#111] border border-white/10 p-10">
           <div className="text-xs uppercase tracking-widest text-gray-500 mb-8">Agent Portal</div>
-          <h1 className="text-3xl font-serif mb-12">Sign In</h1>
+          <h1 className="text-3xl font-serif mb-12">Create Account</h1>
 
           {error && <div className="bg-red-500/10 text-red-500 text-sm p-4 mb-8 border border-red-500/20">{error}</div>}
 
-          <form onSubmit={handleLogin} className="space-y-8">
+          <form onSubmit={handleRegister} className="space-y-8">
+            <div className="relative">
+              <label className="block text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-3">Full Name</label>
+              <input 
+                type="text" 
+                required
+                value={name}
+                onChange={e => setName(e.target.value)}
+                className="w-full text-lg font-light bg-transparent border-b border-white/20 pb-2 focus:outline-none focus:border-white transition-colors" 
+              />
+            </div>
+            
             <div className="relative">
               <label className="block text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-3">Email Address</label>
               <input 
@@ -82,12 +95,12 @@ export default function LoginPage() {
               disabled={loading}
               className="w-full bg-white text-black py-4 uppercase tracking-[0.2em] text-xs font-bold hover:bg-gray-200 transition-colors flex justify-center items-center mt-8 disabled:opacity-50"
             >
-              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Access Dashboard"}
+              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Register"}
             </button>
             
             <div className="text-center pt-4">
-              <Link href="/register" className="text-xs uppercase tracking-widest text-gray-500 hover:text-white transition-colors">
-                Need an account? Register
+              <Link href="/login" className="text-xs uppercase tracking-widest text-gray-500 hover:text-white transition-colors">
+                Already have an account? Sign In
               </Link>
             </div>
           </form>
