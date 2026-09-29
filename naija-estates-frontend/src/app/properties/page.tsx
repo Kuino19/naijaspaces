@@ -140,7 +140,11 @@ export default function PropertiesPage() {
                   paginatedProperties.map((prop) => (
                     <div key={prop.id} className="group cursor-pointer flex flex-col">
                       <Link href={`/properties/${prop.id}`} className="block relative h-[450px] overflow-hidden mb-6">
-                        <img src={prop.imageUrl || "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80"} alt={prop.title} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-[1.5s] ease-out grayscale-[20%]" />
+                        {prop.imageUrl?.includes('/video/upload') || prop.imageUrl?.endsWith('.mp4') ? (
+                           <video src={prop.imageUrl} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-[1.5s] ease-out grayscale-[20%]" muted autoPlay loop playsInline />
+                        ) : (
+                           <img src={prop.imageUrl || "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80"} alt={prop.title} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-[1.5s] ease-out grayscale-[20%]" />
+                        )}
                         <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors"></div>
                       </Link>
                       

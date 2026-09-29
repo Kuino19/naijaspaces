@@ -63,7 +63,11 @@ export default function PropertyDetailsPage() {
       <main className="w-full">
         {/* Full Bleed Image Header */}
         <div className="w-full h-[70vh] relative">
-          <img src={property.imageUrl || "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80"} alt={property.title} className="w-full h-full object-cover grayscale-[10%]" />
+          {property.imageUrl?.includes('/video/upload') || property.imageUrl?.endsWith('.mp4') ? (
+            <video src={property.imageUrl} className="w-full h-full object-cover grayscale-[10%]" muted autoPlay loop playsInline />
+          ) : (
+            <img src={property.imageUrl || "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80"} alt={property.title} className="w-full h-full object-cover grayscale-[10%]" />
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] to-transparent"></div>
         </div>
 

@@ -2,13 +2,16 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Plus, Loader2, Home, X } from "lucide-react";
+import { Plus, Loader2, Home, X, UploadCloud } from "lucide-react";
 
 export default function DashboardPage() {
   const [properties, setProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  
+  const [file, setFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState("");
 
   const [formData, setFormData] = useState({
     title: "",
@@ -44,15 +47,49 @@ export default function DashboardPage() {
     e.preventDefault();
     setSubmitting(true);
     try {
+      let finalImageUrl = formData.imageUrl;
+
+      if (file) {
+        const cloudinaryCloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+        const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "93yMRFDfOOpm7RLdSufmcLsPwHQ";
+
+        if (!cloudinaryCloudName) {
+           alert("Please add NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME to your Vercel Environment Variables. Your upload preset was saved!");
+           setSubmitting(false);
+           return;
+        }
+
+        const formDataData = new FormData();
+        formDataData.append("file", file);
+        formDataData.append("upload_preset", uploadPreset);
+        
+        // auto handles both image and video
+        const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudinaryCloudName}/auto/upload`, {
+          method: "POST",
+          body: formDataData
+        });
+        
+        const uploadData = await uploadRes.json();
+        if (uploadData.secure_url) {
+           finalImageUrl = uploadData.secure_url;
+        } else {
+           console.error("Cloudinary error:", uploadData);
+           alert("Upload to Cloudinary failed. Check the console for details.");
+           throw new Error("Upload failed");
+        }
+      }
+
       const res = await fetch("/api/properties", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, imageUrl: finalImageUrl }),
       });
 
       if (res.ok) {
         setShowAddForm(false);
         fetchMyProperties();
+        setFile(null);
+        setPreviewUrl("");
         setFormData({
           title: "", description: "", price: "", type: "HOUSE", 
           address: "", city: "Lagos", state: "Lagos", 
@@ -126,38 +163,56 @@ export default function DashboardPage() {
               </div>
 
               <div className="space-y-6">
-                <div>
-                  <label className="block text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-2">Property Type</label>
-                  <select value={formData.type} onChange={e => setFormData({...formData, type: e.target.value})} className="w-full bg-transparent border-b border-white/20 pb-2 focus:outline-none focus:border-white text-lg font-light appearance-none rounded-none cursor-pointer">
-                    <option value="HOUSE" className="bg-[#111] text-white">House</option>
-                    <option value="APARTMENT" className="bg-[#111] text-white">Apartment</option>
-                    <option value="SHOP" className="bg-[#111] text-white">Shop / Commercial</option>
-                    <option value="LAND" className="bg-[#111] text-white">Land</option>
-                  </select>
-                </div>
                 <div className="flex gap-4">
                   <div className="flex-1">
                     <label className="block text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-2">City</label>
                     <input required value={formData.city} onChange={e => setFormData({...formData, city: e.target.value})} className="w-full bg-transparent border-b border-white/20 pb-2 focus:outline-none focus:border-white text-lg font-light" placeholder="e.g. Lagos" />
                   </div>
                   <div className="flex-1">
-                    <label className="block text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-2">State</label>
-                    <input required value={formData.state} onChange={e => setFormData({...formData, state: e.target.value})} className="w-full bg-transparent border-b border-white/20 pb-2 focus:outline-none focus:border-white text-lg font-light" placeholder="e.g. Lagos" />
+                    <label className="block text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-2">Property Type</label>
+                    <select value={formData.type} onChange={e => setFormData({...formData, type: e.target.value})} className="w-full bg-transparent border-b border-white/20 pb-2 focus:outline-none focus:border-white text-lg font-light appearance-none rounded-none cursor-pointer">
+                      <option value="HOUSE" className="bg-[#111] text-white">House</option>
+                      <option value="APARTMENT" className="bg-[#111] text-white">Apartment</option>
+                      <option value="SHOP" className="bg-[#111] text-white">Shop / Commercial</option>
+                      <option value="LAND" className="bg-[#111] text-white">Land</option>
+                    </select>
                   </div>
                 </div>
+                
                 <div>
-                  <label className="block text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-2">Specific Address</label>
-                  <input required value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})} className="w-full bg-transparent border-b border-white/20 pb-2 focus:outline-none focus:border-white text-lg font-light" placeholder="e.g. 15 Admiralty Way, Lekki" />
-                </div>
-                <div>
-                  <label className="block text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-2">Image URL</label>
-                  <input value={formData.imageUrl} onChange={e => setFormData({...formData, imageUrl: e.target.value})} className="w-full bg-transparent border-b border-white/20 pb-2 focus:outline-none focus:border-white text-lg font-light" placeholder="https://unsplash.com/..." />
+                  <label className="block text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-2">Media Upload</label>
+                  <div className="border border-dashed border-white/20 p-8 text-center relative hover:bg-white/5 transition-colors cursor-pointer flex flex-col items-center justify-center min-h-[160px] overflow-hidden">
+                    <input 
+                      type="file" 
+                      accept="image/*,video/*" 
+                      className="absolute inset-0 opacity-0 cursor-pointer z-10 w-full h-full" 
+                      onChange={(e) => {
+                        const selectedFile = e.target.files?.[0];
+                        if (selectedFile) {
+                          setFile(selectedFile);
+                          setPreviewUrl(URL.createObjectURL(selectedFile));
+                        }
+                      }}
+                    />
+                    {previewUrl ? (
+                      file?.type.startsWith('video/') ? (
+                         <video src={previewUrl} className="absolute inset-0 w-full h-full object-cover opacity-80" muted autoPlay loop />
+                      ) : (
+                         <img src={previewUrl} alt="Preview" className="absolute inset-0 w-full h-full object-cover opacity-80" />
+                      )
+                    ) : (
+                      <div className="flex flex-col items-center">
+                        <UploadCloud className="h-8 w-8 text-gray-500 mb-4" />
+                        <span className="text-sm text-gray-400">Drag & Drop Image or Video</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
 
               <div className="md:col-span-2 pt-6">
                 <button type="submit" disabled={submitting} className="bg-white text-black px-10 py-4 uppercase tracking-widest text-xs font-bold hover:bg-gray-200 transition-colors disabled:opacity-50">
-                  {submitting ? "Publishing..." : "Publish Listing"}
+                  {submitting ? "Publishing Media..." : "Publish Listing"}
                 </button>
               </div>
             </form>
@@ -175,7 +230,11 @@ export default function DashboardPage() {
             {properties.map(p => (
               <div key={p.id} className="border border-white/10 bg-[#111] overflow-hidden group">
                 <div className="aspect-video relative overflow-hidden bg-black">
-                  <img src={p.imageUrl || "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80"} alt={p.title} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" />
+                  {p.imageUrl?.includes('/video/upload') || p.imageUrl?.endsWith('.mp4') ? (
+                    <video src={p.imageUrl} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all duration-700" muted autoPlay loop />
+                  ) : (
+                    <img src={p.imageUrl || "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80"} alt={p.title} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" />
+                  )}
                 </div>
                 <div className="p-6">
                   <div className="text-[10px] uppercase tracking-[0.2em] text-gray-400 mb-2 flex justify-between">
