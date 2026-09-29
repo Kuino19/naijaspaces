@@ -8,24 +8,27 @@ async function main() {
   
   console.log('Seeding the database with 50 diverse properties...');
 
+  const bcrypt = require('bcryptjs');
+  const hashed = await bcrypt.hash('password123', 10);
+
   const agent = await prisma.user.upsert({
     where: { email: 'agent@naijaestates.com' },
-    update: {},
+    update: { password: hashed },
     create: {
       email: 'agent@naijaestates.com',
       name: 'Chinedu Real Estate Ltd',
-      password: 'password123',
+      password: hashed,
       role: 'AGENT',
     },
   });
 
   const agent2 = await prisma.user.upsert({
     where: { email: 'contact@naijaspaces.com' },
-    update: {},
+    update: { password: hashed },
     create: {
       email: 'contact@naijaspaces.com',
       name: 'Naija Spaces',
-      password: 'password123',
+      password: hashed,
       role: 'AGENT',
     },
   });

@@ -64,8 +64,8 @@ export default function PristinePremiumHomePage() {
           <Link href="/about" className="hover:opacity-50 transition-opacity">The Agency</Link>
         </nav>
         <div className="flex gap-6 text-sm font-medium tracking-widest uppercase items-center">
-          <button className="hover:opacity-50 transition-opacity hidden md:block">Sign In</button>
-          <button className="border border-white/20 px-5 py-2 hover:bg-white hover:text-black transition-all duration-300">List Property</button>
+          <Link href="/login" className="hover:opacity-50 transition-opacity hidden md:block">Agent Login</Link>
+          <Link href="/dashboard" className="border border-white/20 px-5 py-2 hover:bg-white hover:text-black transition-all duration-300 block">List Property</Link>
         </div>
       </motion.header>
 
