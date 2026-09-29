@@ -11,6 +11,13 @@ export default function PropertiesPage() {
   const [viewMode, setViewMode] = useState<"list" | "map">("list");
   const [properties, setProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [category, setCategory] = useState<"all" | "residential" | "commercial">("all");
+
+  const filteredProperties = properties.filter(prop => {
+    if (category === "residential") return ["HOUSE", "APARTMENT"].includes(prop.type);
+    if (category === "commercial") return ["SHOP", "LAND"].includes(prop.type);
+    return true;
+  });
 
   useEffect(() => {
     fetch("/api/properties")
@@ -62,12 +69,14 @@ export default function PropertiesPage() {
             </div>
             
             <div className="relative group">
-              <label className="block text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-3">Residence Type</label>
-              <select className="w-full text-xl font-light bg-transparent border-b border-white/20 pb-2 focus:outline-none focus:border-white transition-colors cursor-pointer appearance-none">
-                <option className="bg-[#0a0a0a] text-white">All Residences</option>
-                <option className="bg-[#0a0a0a] text-white">Penthouses</option>
-                <option className="bg-[#0a0a0a] text-white">Villas</option>
-                <option className="bg-[#0a0a0a] text-white">Estates</option>
+              <label className="block text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-3">Category</label>
+              <select 
+                value={category}
+                onChange={(e) => setCategory(e.target.value as any)}
+                className="w-full text-xl font-light bg-transparent border-b border-white/20 pb-2 focus:outline-none focus:border-white transition-colors cursor-pointer appearance-none">
+                <option value="all" className="bg-[#0a0a0a] text-white">All Properties</option>
+                <option value="residential" className="bg-[#0a0a0a] text-white">Houses & Apartments</option>
+                <option value="commercial" className="bg-[#0a0a0a] text-white">Shops & Commercial</option>
               </select>
             </div>
 
@@ -94,7 +103,7 @@ export default function PropertiesPage() {
                     <Loader2 className="w-8 h-8 animate-spin" />
                   </div>
                 ) : (
-                  properties.map((prop) => (
+                  filteredProperties.map((prop) => (
                     <div key={prop.id} className="group cursor-pointer flex flex-col">
                       <Link href={`/properties/${prop.id}`} className="block relative h-[450px] overflow-hidden mb-6">
                         <img src={prop.imageUrl || "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80"} alt={prop.title} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-[1.5s] ease-out grayscale-[20%]" />
@@ -122,7 +131,7 @@ export default function PropertiesPage() {
           ) : (
             <div className="h-full relative z-0">
                <div className="w-full h-full opacity-90 filter invert-[90%] hue-rotate-180 contrast-125">
-                 <MapComponent properties={properties} />
+                 <MapComponent properties={filteredProperties} />
                </div>
             </div>
           )}

@@ -2,30 +2,50 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { ArrowLeft, Star, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
+import { useState, useEffect } from "react";
 
 export default function PropertyDetailsPage() {
   const params = useParams();
   const { id } = params;
+  const [property, setProperty] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-  const property = {
-    id,
-    title: 'The Genesis Mansion',
-    price: '₦150,000,000 / yr',
-    location: 'Banana Island, Ikoyi',
-    image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&auto=format&fit=crop&w=2850&q=80',
-    beds: 6, 
-    baths: 7, 
-    type: 'Villa',
-    description: 'An unparalleled architectural masterpiece situated in the most exclusive enclave of Banana Island. The Genesis Mansion redefines luxury with its soaring double-height ceilings, Italian marble flooring, and panoramic views. Features include a private cinema, infinity pool, smart-home automation, and a state-of-the-art chef\'s kitchen. Designed for those who demand the absolute finest in life.',
-    rating: 5.0,
-    reviews: [
-      { id: 1, user: 'A. O.', rating: 5, comment: 'Breathtaking architecture and flawless execution. A true statement property.', date: 'Oct 15, 2026' },
-    ],
-    agent: {
-      name: 'NaijaSpaces Private Office',
-    }
-  };
+  useEffect(() => {
+    if (!id) return;
+    fetch(`/api/properties/${id}`)
+      .then(res => res.json())
+      .then(data => {
+        setProperty(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error("Failed to fetch property:", err);
+        setLoading(false);
+      });
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-white animate-spin" />
+      </div>
+    );
+  }
+
+  if (!property || property.error) {
+    return (
+      <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center text-white gap-4">
+        <h1 className="text-3xl font-serif">Property not found</h1>
+        <Link href="/properties" className="text-gray-400 hover:text-white underline uppercase text-xs tracking-widest">
+          Return to portfolio
+        </Link>
+      </div>
+    );
+  }
+
+  const periodStr = property.rentalPeriod === 'DAILY' ? 'day' : property.rentalPeriod === 'WEEKLY' ? 'wk' : property.rentalPeriod === 'MONTHLY' ? 'mo' : 'yr';
+  const priceStr = `₦${(property.price || 0).toLocaleString()} / ${periodStr}`;
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-white selection:text-black">
@@ -43,7 +63,7 @@ export default function PropertyDetailsPage() {
       <main className="w-full">
         {/* Full Bleed Image Header */}
         <div className="w-full h-[70vh] relative">
-          <img src={property.image} alt={property.title} className="w-full h-full object-cover grayscale-[10%]" />
+          <img src={property.imageUrl || "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80"} alt={property.title} className="w-full h-full object-cover grayscale-[10%]" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] to-transparent"></div>
         </div>
 
@@ -52,12 +72,12 @@ export default function PropertyDetailsPage() {
           
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-8">
             <div>
-              <div className="text-xs uppercase tracking-[0.2em] text-gray-400 mb-4">{property.location}</div>
+              <div className="text-xs uppercase tracking-[0.2em] text-gray-400 mb-4">{property.address}, {property.city}</div>
               <h1 className="text-5xl md:text-7xl font-serif leading-none">{property.title}</h1>
             </div>
             <div className="text-right">
-              <div className="text-sm uppercase tracking-widest text-gray-400 mb-2">Asking Price</div>
-              <div className="text-4xl md:text-5xl font-light">{property.price}</div>
+              <div className="text-sm uppercase tracking-widest text-gray-400 mb-2">Asking Rent</div>
+              <div className="text-4xl md:text-5xl font-light">{priceStr}</div>
             </div>
           </div>
 
@@ -71,14 +91,22 @@ export default function PropertyDetailsPage() {
                   <span className="block text-gray-500 mb-1">Type</span>
                   <span>{property.type}</span>
                 </div>
-                <div>
-                  <span className="block text-gray-500 mb-1">Bedrooms</span>
-                  <span>{property.beds}</span>
-                </div>
-                <div>
-                  <span className="block text-gray-500 mb-1">Bathrooms</span>
-                  <span>{property.baths}</span>
-                </div>
+                {property.type !== 'SHOP' && property.type !== 'OFFICE' && property.type !== 'LAND' && (
+                  <>
+                    {property.bedrooms && (
+                      <div>
+                        <span className="block text-gray-500 mb-1">Bedrooms</span>
+                        <span>{property.bedrooms}</span>
+                      </div>
+                    )}
+                    {property.bathrooms && (
+                      <div>
+                        <span className="block text-gray-500 mb-1">Bathrooms</span>
+                        <span>{property.bathrooms}</span>
+                      </div>
+                    )}
+                  </>
+                )}
               </div>
 
               <div className="mb-16">
@@ -97,8 +125,8 @@ export default function PropertyDetailsPage() {
                 
                 <div className="space-y-4 mb-12 text-sm font-light text-gray-400">
                   <div className="flex justify-between border-b border-white/10 pb-4">
-                    <span>Base Price</span>
-                    <span className="text-white">{property.price}</span>
+                    <span>Base Rent</span>
+                    <span className="text-white">{priceStr}</span>
                   </div>
                   <div className="flex justify-between border-b border-white/10 pb-4">
                     <span>Agency Premium</span>
@@ -110,9 +138,9 @@ export default function PropertyDetailsPage() {
                   Initiate Checkout <ArrowRight className="h-4 w-4" />
                 </Link>
 
-                <div className="mt-12 pt-8 border-t border-white/10">
-                  <div className="text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-3">Representation</div>
-                  <div className="font-serif text-xl">{property.agent.name}</div>
+                <div className="mt-8 pt-8 border-t border-white/10 text-center">
+                  <div className="text-[10px] uppercase tracking-widest text-gray-500 mb-2">Listed By</div>
+                  <div className="text-sm">{property.agent?.name || 'NaijaSpaces Private Office'}</div>
                 </div>
               </div>
             </div>
