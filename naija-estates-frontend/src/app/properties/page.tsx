@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { Search, MapPin, Filter, ArrowRight, List, Map as MapIcon, Loader2 } from "lucide-react";
+import { Search, MapPin, Filter, ArrowRight, List, Map as MapIcon, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
 
 const MapComponent = dynamic(() => import("../../components/MapComponent"), { ssr: false });
 
@@ -12,12 +12,24 @@ export default function PropertiesPage() {
   const [properties, setProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState<"all" | "residential" | "commercial">("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12;
 
   const filteredProperties = properties.filter(prop => {
     if (category === "residential") return ["HOUSE", "APARTMENT"].includes(prop.type);
     if (category === "commercial") return ["SHOP", "LAND"].includes(prop.type);
     return true;
   });
+
+  const totalPages = Math.ceil(filteredProperties.length / itemsPerPage);
+  const paginatedProperties = filteredProperties.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [category]);
 
   useEffect(() => {
     fetch("/api/properties")
@@ -58,7 +70,7 @@ export default function PropertiesPage() {
 
       <main className="flex-1 flex overflow-hidden">
         
-        {/* Minimalist Sidebar Filters */}
+        {/* Minimalist Sidebar Filters (Desktop) */}
         <aside className="w-80 border-r border-white/10 p-10 overflow-y-auto hidden md:block">
           <div className="text-xs uppercase tracking-widest text-gray-500 mb-12">Filter Portfolio</div>
           
@@ -93,9 +105,31 @@ export default function PropertiesPage() {
 
         {/* Properties Area */}
         <div className="flex-1 overflow-y-auto">
+          {/* Mobile Category Filters */}
+          <div className="md:hidden flex gap-4 overflow-x-auto p-6 border-b border-white/10 hide-scrollbar">
+            <button 
+              onClick={() => setCategory("all")}
+              className={`whitespace-nowrap px-4 py-2 rounded-full border text-xs tracking-widest uppercase ${category === "all" ? "bg-white text-black border-white" : "border-white/20 text-gray-400 hover:text-white"}`}
+            >
+              All Properties
+            </button>
+            <button 
+              onClick={() => setCategory("residential")}
+              className={`whitespace-nowrap px-4 py-2 rounded-full border text-xs tracking-widest uppercase ${category === "residential" ? "bg-white text-black border-white" : "border-white/20 text-gray-400 hover:text-white"}`}
+            >
+              Houses & Apts
+            </button>
+            <button 
+              onClick={() => setCategory("commercial")}
+              className={`whitespace-nowrap px-4 py-2 rounded-full border text-xs tracking-widest uppercase ${category === "commercial" ? "bg-white text-black border-white" : "border-white/20 text-gray-400 hover:text-white"}`}
+            >
+              Shops & Commercial
+            </button>
+          </div>
+
           {viewMode === "list" ? (
             <div className="p-6 md:p-16">
-              <h1 className="text-4xl md:text-5xl font-serif mb-16">The Collection.</h1>
+              <h1 className="text-4xl md:text-5xl font-serif mb-10 md:mb-16">The Collection.</h1>
               
               <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-20">
                 {loading ? (
@@ -103,7 +137,7 @@ export default function PropertiesPage() {
                     <Loader2 className="w-8 h-8 animate-spin" />
                   </div>
                 ) : (
-                  filteredProperties.map((prop) => (
+                  paginatedProperties.map((prop) => (
                     <div key={prop.id} className="group cursor-pointer flex flex-col">
                       <Link href={`/properties/${prop.id}`} className="block relative h-[450px] overflow-hidden mb-6">
                         <img src={prop.imageUrl || "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80"} alt={prop.title} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-[1.5s] ease-out grayscale-[20%]" />
@@ -127,6 +161,29 @@ export default function PropertiesPage() {
                   ))
                 )}
               </div>
+
+              {/* Pagination Controls */}
+              {!loading && totalPages > 1 && (
+                <div className="mt-20 pt-10 border-t border-white/10 flex justify-between items-center">
+                  <button 
+                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                    className="flex items-center gap-2 text-xs uppercase tracking-widest hover:text-gray-300 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                  >
+                    <ChevronLeft className="w-4 h-4" /> Previous
+                  </button>
+                  <div className="text-xs tracking-[0.3em] font-light text-gray-400">
+                    {currentPage} / {totalPages}
+                  </div>
+                  <button 
+                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                    disabled={currentPage === totalPages}
+                    className="flex items-center gap-2 text-xs uppercase tracking-widest hover:text-gray-300 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                  >
+                    Next <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
             </div>
           ) : (
             <div className="h-full relative z-0">
