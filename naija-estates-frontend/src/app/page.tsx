@@ -100,7 +100,7 @@ export default function PristinePremiumHomePage() {
             
             <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-start md:items-end mt-12 md:mt-24">
               <motion.p variants={fadeUp} className="text-gray-300 max-w-md text-base md:text-lg font-light leading-relaxed">
-                Curating Nigeria's most exceptional architectural masterpieces. An exclusive portfolio of penthouses, mansions, and estates.
+                Curating Nigeria's most exceptional real estate. Discover our exclusive portfolio of luxury mansions, commercial spaces, and premium short-term rentals.
               </motion.p>
               
               <motion.div variants={fadeUp} className="pointer-events-auto">
