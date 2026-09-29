@@ -344,7 +344,13 @@ export default function PristinePremiumHomePage() {
 
           {/* Copyright */}
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-[10px] uppercase tracking-widest text-gray-600 border-t border-white/5 pt-8">
-            <div>© 2026 NAIJAESTATES. ALL RIGHTS RESERVED.</div>
+            <div className="flex flex-col md:flex-row gap-4 items-center">
+              <span>© {new Date().getFullYear()} NAIJASPACES. ALL RIGHTS RESERVED.</span>
+              <span className="hidden md:inline">|</span>
+              <span>
+                MADE BY <a href="https://www.goanitech.com" target="_blank" rel="noopener noreferrer" className="text-white hover:underline transition-all">GOANITECH</a>
+              </span>
+            </div>
             <div className="flex gap-8 mt-4 md:mt-0">
               <Link href="#" className="hover:text-gray-300 transition-colors">Privacy Policy</Link>
               <Link href="#" className="hover:text-gray-300 transition-colors">Terms of Service</Link>

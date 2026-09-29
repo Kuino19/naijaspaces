@@ -185,6 +185,15 @@ export default function PropertiesPage() {
                 </div>
               )}
             </div>
+            {/* Minimal Footer */}
+            <div className="w-full text-center py-8 text-[10px] uppercase tracking-widest text-gray-500 border-t border-white/5">
+              <span>© {new Date().getFullYear()} NAIJASPACES.</span>
+              <span className="mx-3">|</span>
+              <span>
+                MADE BY <a href="https://www.goanitech.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">GOANITECH</a>
+              </span>
+            </div>
+          </div>
           ) : (
             <div className="h-full relative z-0">
                <div className="w-full h-full opacity-90 filter invert-[90%] hue-rotate-180 contrast-125">

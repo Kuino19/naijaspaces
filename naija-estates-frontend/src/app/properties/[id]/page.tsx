@@ -147,6 +147,17 @@ export default function PropertyDetailsPage() {
 
           </div>
         </div>
+
+        {/* Minimal Footer */}
+        <footer className="max-w-6xl mx-auto px-6 pb-12 w-full">
+          <div className="w-full text-center pt-8 text-[10px] uppercase tracking-widest text-gray-500 border-t border-white/5">
+            <span>© {new Date().getFullYear()} NAIJASPACES.</span>
+            <span className="mx-3">|</span>
+            <span>
+              MADE BY <a href="https://www.goanitech.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">GOANITECH</a>
+            </span>
+          </div>
+        </footer>
       </main>
     </div>
   );
