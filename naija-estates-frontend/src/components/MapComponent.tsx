@@ -32,7 +32,7 @@ export default function MapComponent({ properties = [] }: { properties?: any[] }
             <Marker key={loc.id} position={[loc.lat, loc.lng]} icon={customIcon}>
               <Popup>
                 <div className="font-semibold">{loc.title}</div>
-                <div className="text-black font-bold">₦{loc.price.toLocaleString()} / yr</div>
+                <div className="text-black font-bold">₦{loc.price.toLocaleString()} / {loc.rentalPeriod === 'DAILY' ? 'day' : loc.rentalPeriod === 'WEEKLY' ? 'wk' : loc.rentalPeriod === 'MONTHLY' ? 'mo' : 'yr'}</div>
               </Popup>
             </Marker>
           ) : null

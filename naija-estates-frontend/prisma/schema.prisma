@@ -32,14 +32,15 @@ model Property {
   lat         Float?
   lng         Float?
   imageUrl    String?
-  isAvailable Boolean      @default(true)
-  rating      Float        @default(0) // Average rating
-  agentId     String
-  agent       User         @relation(fields: [agentId], references: [id])
-  payments    Payment[]
-  reviews     Review[]
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  isAvailable  Boolean      @default(true)
+  rentalPeriod RentalPeriod @default(YEARLY)
+  rating       Float        @default(0) // Average rating
+  agentId      String
+  agent        User         @relation(fields: [agentId], references: [id])
+  payments     Payment[]
+  reviews      Review[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
 }
 
 model Review {
@@ -83,4 +84,12 @@ enum PaymentStatus {
   PENDING
   SUCCESS
   FAILED
+}
+
+
+enum RentalPeriod {
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
 }

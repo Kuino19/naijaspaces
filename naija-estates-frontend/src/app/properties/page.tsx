@@ -108,7 +108,7 @@ export default function PropertiesPage() {
                         <div className="text-sm uppercase tracking-[0.15em] text-gray-300 mb-6 font-medium">{prop.city}, {prop.state}</div>
                         
                         <div className="flex justify-between items-end mt-auto pt-6 border-t border-white/20">
-                          <div className="text-2xl font-light text-white">₦{(prop.price || 0).toLocaleString()} <span className="text-sm text-gray-400">/ yr</span></div>
+                          <div className="text-2xl font-light text-white">₦{(prop.price || 0).toLocaleString()} <span className="text-sm text-gray-400">/ {prop.rentalPeriod === 'DAILY' ? 'day' : prop.rentalPeriod === 'WEEKLY' ? 'week' : prop.rentalPeriod === 'MONTHLY' ? 'mo' : 'yr'}</span></div>
                           <Link href={`/properties/${prop.id}`} className="flex items-center gap-2 text-sm uppercase tracking-widest text-white hover:text-gray-300 transition-colors">
                             Details <ArrowRight className="h-4 w-4" />
                           </Link>

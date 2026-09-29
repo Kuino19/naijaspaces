@@ -97,13 +97,20 @@ async function main() {
     
     if (tier === "affordable") {
       titlePool = affordableTitles;
-      basePrice = 400000 + Math.random() * 1500000; // 400k to 1.9M
+      basePrice = 400000 + Math.random() * 1500000;
     } else if (tier === "high") {
       titlePool = highEndTitles;
-      basePrice = 15000000 + Math.random() * 135000000; // 15M to 150M
+      basePrice = 15000000 + Math.random() * 135000000;
     } else {
-      basePrice = 3000000 + Math.random() * 12000000; // 3M to 15M
+      basePrice = 3000000 + Math.random() * 12000000;
     }
+
+    const periods = ["DAILY", "WEEKLY", "MONTHLY", "YEARLY"];
+    const rentalPeriod = periods[Math.floor(Math.random() * periods.length)] as any;
+
+    if (rentalPeriod === "DAILY") basePrice = basePrice / 300;
+    else if (rentalPeriod === "WEEKLY") basePrice = basePrice / 48;
+    else if (rentalPeriod === "MONTHLY") basePrice = basePrice / 12;
 
     const title = titlePool[Math.floor(Math.random() * titlePool.length)];
     const isShopOrOffice = title.includes("Shop") || title.includes("Office");
@@ -125,6 +132,7 @@ async function main() {
       state: location.state,
       imageUrl: imageUrl,
       isAvailable: true,
+      rentalPeriod: rentalPeriod,
       agentId: agents[Math.floor(Math.random() * agents.length)],
     });
   }
