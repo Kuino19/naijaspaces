@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String     @id @default(uuid())
+  email      String     @unique
+  name       String?
+  password   String
+  role       Role       @default(TENANT)
+  properties Property[] // Properties owned/listed by agents
+  payments   Payment[]
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  reviews    Review[]
+}
+
+model Property {
+  id          String       @id @default(uuid())
+  title       String
+  description String
+  price       Float
+  type        PropertyType
+  address     String
+  city        String
+  state       String
+  lat         Float?
+  lng         Float?
+  imageUrl    String?
+  isAvailable Boolean      @default(true)
+  rating      Float        @default(0) // Average rating
+  agentId     String
+  agent       User         @relation(fields: [agentId], references: [id])
+  payments    Payment[]
+  reviews     Review[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Review {
+  id         String   @id @default(uuid())
+  rating     Int
+  comment    String
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id])
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  createdAt  DateTime @default(now())
+}
+
+model Payment {
+  id         String        @id @default(uuid())
+  amount     Float
+  status     PaymentStatus @default(PENDING)
+  reference  String        @unique // Paystack reference
+  propertyId String
+  property   Property      @relation(fields: [propertyId], references: [id])
+  userId     String
+  user       User          @relation(fields: [userId], references: [id])
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+}
+
+enum Role {
+  TENANT
+  AGENT
+  ADMIN
+}
+
+enum PropertyType {
+  APARTMENT
+  HOUSE
+  SHOP
+  LAND
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
