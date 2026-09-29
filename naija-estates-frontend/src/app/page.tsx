@@ -230,7 +230,7 @@ export default function PristinePremiumHomePage() {
                       </div>
                       <h3 className="text-3xl md:text-4xl font-serif">The Genesis Mansion</h3>
                     </div>
-                    <div className="text-xl md:text-2xl font-light text-gray-300">₦150,000,000</div>
+                    <div className="text-xl md:text-2xl font-light text-gray-300">₦150,000,000 / yr</div>
                   </div>
                 </Link>
               </motion.div>
@@ -239,7 +239,7 @@ export default function PristinePremiumHomePage() {
               <div className="md:col-span-5 flex flex-col gap-20 lg:mt-24">
                 {[
                   { img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80", title: "Oceanview Penthouse", loc: "Eko Atlantic City", price: "₦45,000,000 / year" },
-                  { img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80", title: "The Glass Villa", loc: "Maitama, Abuja", price: "₦85,000,000" }
+                  { img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80", title: "The Glass Villa", loc: "Maitama, Abuja", price: "₦85,000,000 / year" }
                 ].map((item, i) => (
                   <motion.div 
                     key={i}

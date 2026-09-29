@@ -100,9 +100,9 @@ async function main() {
       basePrice = 400000 + Math.random() * 1500000; // 400k to 1.9M
     } else if (tier === "high") {
       titlePool = highEndTitles;
-      basePrice = 80000000 + Math.random() * 900000000; // 80M to 980M
+      basePrice = 15000000 + Math.random() * 135000000; // 15M to 150M
     } else {
-      basePrice = 5000000 + Math.random() * 45000000; // 5M to 50M
+      basePrice = 3000000 + Math.random() * 12000000; // 3M to 15M
     }
 
     const title = titlePool[Math.floor(Math.random() * titlePool.length)];

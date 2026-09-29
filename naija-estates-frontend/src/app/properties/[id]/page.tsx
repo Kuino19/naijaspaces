@@ -11,7 +11,7 @@ export default function PropertyDetailsPage() {
   const property = {
     id,
     title: 'The Genesis Mansion',
-    price: '₦150,000,000',
+    price: '₦150,000,000 / yr',
     location: 'Banana Island, Ikoyi',
     image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&auto=format&fit=crop&w=2850&q=80',
     beds: 6, 
