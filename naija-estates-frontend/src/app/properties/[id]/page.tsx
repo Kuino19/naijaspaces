@@ -23,7 +23,7 @@ export default function PropertyDetailsPage() {
       { id: 1, user: 'A. O.', rating: 5, comment: 'Breathtaking architecture and flawless execution. A true statement property.', date: 'Oct 15, 2026' },
     ],
     agent: {
-      name: 'NaijaEstates Private Office',
+      name: 'NaijaSpaces Private Office',
     }
   };
 
@@ -33,7 +33,7 @@ export default function PropertyDetailsPage() {
       {/* Header */}
       <header className="w-full z-50 px-6 py-8 flex justify-between items-center border-b border-white/10">
         <Link href="/" className="text-xl font-bold tracking-widest uppercase hover:opacity-50 transition-opacity">
-          Naija<span className="font-light">Estates</span>
+          Naija<span className="font-light">Spaces</span>
         </Link>
         <Link href="/properties" className="flex items-center gap-3 text-xs tracking-widest uppercase hover:opacity-50 transition-opacity border-b border-white/30 pb-1">
           <ArrowLeft className="h-4 w-4" /> Return to Portfolio

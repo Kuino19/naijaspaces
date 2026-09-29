@@ -31,7 +31,7 @@ export default function PropertiesPage() {
       {/* Ultra-Clean Header */}
       <header className="w-full z-50 px-6 py-8 flex justify-between items-center border-b border-white/10 sticky top-0 bg-[#0a0a0a]/90 backdrop-blur-md">
         <Link href="/" className="text-xl font-bold tracking-widest uppercase hover:opacity-50 transition-opacity">
-          Naija<span className="font-light">Estates</span>
+          Naija<span className="font-light">Spaces</span>
         </Link>
         <div className="flex gap-6 text-sm font-medium tracking-widest uppercase items-center">
           <button 

@@ -56,7 +56,7 @@ export default function PristinePremiumHomePage() {
       >
         <div className="text-xl font-bold tracking-widest uppercase flex items-center gap-2">
           <Building className="h-5 w-5" />
-          <span>Naija<span className="font-light">Estates</span></span>
+          <span>Naija<span className="font-light">Spaces</span></span>
         </div>
         <nav className="hidden md:flex gap-12 text-sm font-medium tracking-widest uppercase">
           <Link href="/properties" className="hover:opacity-50 transition-opacity">Residences</Link>
