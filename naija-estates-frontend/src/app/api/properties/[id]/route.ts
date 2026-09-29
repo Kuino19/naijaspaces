@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const resolvedParams = await params;
     const property = await prisma.property.findUnique({
-      where: { id: params.id },
+      where: { id: resolvedParams.id },
       include: {
         agent: {
           select: { name: true, email: true }
