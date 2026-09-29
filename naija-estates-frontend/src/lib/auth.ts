@@ -1,31 +1,37 @@
-import { SignJWT, jwtVerify } from 'jose';
-import { cookies } from 'next/headers';
+import { createNeonAuth } from '@neondatabase/auth/next/server';
+import { prisma } from '@/lib/prisma';
 
-const secretKey = process.env.JWT_SECRET || 'fallback-secret-key-for-dev';
-const key = new TextEncoder().encode(secretKey);
+export const auth = createNeonAuth({
+  baseUrl: process.env.NEON_AUTH_BASE_URL || process.env.NEXT_PUBLIC_NEON_AUTH_BASE_URL || '',
+  cookies: {
+    secret: process.env.NEON_AUTH_COOKIE_SECRET || '',
+  },
+});
 
-export async function encrypt(payload: any) {
-  return await new SignJWT(payload)
-    .setProtectedHeader({ alg: 'HS256' })
-    .setIssuedAt()
-    .setExpirationTime('24h')
-    .sign(key);
-}
-
-export async function decrypt(input: string): Promise<any> {
-  const { payload } = await jwtVerify(input, key, {
-    algorithms: ['HS256'],
+export const getSession = async () => {
+  const { data: result } = await auth.getSession();
+  if (!result || !result.user) return null;
+  
+  // Find or create the user in the application database
+  let dbUser = await prisma.user.findUnique({
+    where: { email: result.user.email },
   });
-  return payload;
-}
 
-export async function getSession() {
-  const cookieStore = await cookies();
-  const session = cookieStore.get('session')?.value;
-  if (!session) return null;
-  try {
-    return await decrypt(session);
-  } catch (err) {
-    return null;
+  if (!dbUser) {
+    dbUser = await prisma.user.create({
+      data: {
+        id: result.user.id,
+        email: result.user.email,
+        name: result.user.name || result.user.email.split('@')[0],
+        password: "neon-auth-managed", // Placeholder, password managed by Neon
+        role: "AGENT", // Default for new signups
+      },
+    });
   }
-}
+
+  return {
+    userId: dbUser.id,
+    email: dbUser.email,
+    role: dbUser.role,
+  };
+};

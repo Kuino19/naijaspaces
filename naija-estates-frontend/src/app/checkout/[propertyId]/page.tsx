@@ -1,12 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { useParams } from "next/navigation";
+import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
 
 export default function CheckoutPage() {
+  const params = useParams();
+  const { propertyId } = params;
+  
+  const [property, setProperty] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [duration, setDuration] = useState(1);
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+
+  useEffect(() => {
+    if (!propertyId) return;
+    fetch(`/api/properties/${propertyId}`)
+      .then(res => res.json())
+      .then(data => {
+        setProperty(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error(err);
+        setLoading(false);
+      });
+  }, [propertyId]);
 
   const handlePayment = (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,12 +40,31 @@ export default function CheckoutPage() {
     }, 2500);
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-white animate-spin" />
+      </div>
+    );
+  }
+
+  if (!property || property.error) {
+    return (
+      <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center text-white gap-4">
+        <h1 className="text-3xl font-serif">Property not found</h1>
+        <Link href="/properties" className="text-gray-400 hover:text-white underline uppercase text-xs tracking-widest">
+          Return to portfolio
+        </Link>
+      </div>
+    );
+  }
+
   if (paymentSuccess) {
     return (
       <div className="min-h-screen bg-[#0a0a0a] text-white flex items-center justify-center p-6 selection:bg-white selection:text-black">
         <div className="max-w-xl w-full text-center">
           <h2 className="text-5xl md:text-7xl font-serif mb-6 leading-none">Transaction <br/><span className="italic font-light text-gray-500">Authorized.</span></h2>
-          <p className="text-xl font-light text-gray-400 mb-12">Your acquisition of The Genesis Mansion has been initiated. Our private office will contact you shortly.</p>
+          <p className="text-xl font-light text-gray-400 mb-12">Your acquisition of {property.title} has been initiated. Our private office will contact you shortly.</p>
           <Link href="/properties" className="inline-block border-b border-white pb-2 uppercase tracking-[0.2em] text-xs hover:text-gray-400 hover:border-gray-400 transition-colors">
             Return to Portfolio
           </Link>
@@ -33,14 +73,21 @@ export default function CheckoutPage() {
     );
   }
 
+  const periodStr = property.rentalPeriod === 'DAILY' ? 'Days' : property.rentalPeriod === 'WEEKLY' ? 'Weeks' : property.rentalPeriod === 'MONTHLY' ? 'Months' : 'Years';
+  
+  const basePrice = (property.price || 0) * duration;
+  const agencyPremium = basePrice * 0.05;
+  const legalFees = basePrice * 0.02;
+  const total = basePrice + agencyPremium + legalFees;
+
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-white selection:text-black">
       
       <header className="w-full px-6 py-8 flex justify-between items-center">
         <Link href="/" className="text-xl font-bold tracking-widest uppercase hover:opacity-50 transition-opacity">
-          Naija<span className="font-light">Estates</span>
+          Naija<span className="font-light">Spaces</span>
         </Link>
-        <Link href="/properties/1" className="flex items-center gap-3 text-xs tracking-widest uppercase hover:opacity-50 transition-opacity">
+        <Link href={`/properties/${property.id}`} className="flex items-center gap-3 text-xs tracking-widest uppercase hover:opacity-50 transition-opacity">
           <ArrowLeft className="h-4 w-4" /> Cancel
         </Link>
       </header>
@@ -52,33 +99,46 @@ export default function CheckoutPage() {
           <h1 className="text-4xl md:text-6xl font-serif mb-12">Checkout.</h1>
           
           <div className="mb-12">
-            <img 
-              src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-              alt="Property" 
-              className="w-full h-64 object-cover mb-6 grayscale-[20%]" 
-            />
-            <div className="text-xs uppercase tracking-widest text-gray-500 mb-2">Banana Island, Ikoyi</div>
-            <h2 className="text-3xl font-serif">The Genesis Mansion</h2>
+            {property.imageUrl?.includes('/video/upload') || property.imageUrl?.endsWith('.mp4') ? (
+               <video src={property.imageUrl} className="w-full h-64 object-cover mb-6 grayscale-[20%]" muted autoPlay loop playsInline />
+            ) : (
+               <img src={property.imageUrl || "https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"} alt={property.title} className="w-full h-64 object-cover mb-6 grayscale-[20%]" />
+            )}
+            <div className="text-xs uppercase tracking-widest text-gray-500 mb-2">{property.address}, {property.city}</div>
+            <h2 className="text-3xl font-serif">{property.title}</h2>
           </div>
 
           <div className="space-y-6 text-lg font-light border-y border-white/10 py-8">
+            <div className="flex justify-between items-center">
+              <span className="text-gray-400">Rental Duration</span>
+              <div className="flex items-center gap-4">
+                <input 
+                  type="number" 
+                  min="1" 
+                  value={duration} 
+                  onChange={(e) => setDuration(Math.max(1, parseInt(e.target.value) || 1))}
+                  className="w-16 bg-transparent border-b border-white/20 pb-1 text-center focus:outline-none focus:border-white transition-colors"
+                />
+                <span>{periodStr}</span>
+              </div>
+            </div>
             <div className="flex justify-between">
-              <span className="text-gray-400">Asking Price</span>
-              <span>₦150,000,000</span>
+              <span className="text-gray-400">Base Rent ({duration} {periodStr})</span>
+              <span>₦{basePrice.toLocaleString()}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-400">Agency Premium (5%)</span>
-              <span>₦7,500,000</span>
+              <span>₦{agencyPremium.toLocaleString()}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-400">Legal Fees (2%)</span>
-              <span>₦3,000,000</span>
+              <span>₦{legalFees.toLocaleString()}</span>
             </div>
           </div>
           
           <div className="flex justify-between items-end mt-8">
             <span className="text-sm uppercase tracking-widest text-gray-500">Total</span>
-            <span className="text-4xl font-light">₦160,500,000</span>
+            <span className="text-4xl font-light">₦{total.toLocaleString()}</span>
           </div>
         </div>
 

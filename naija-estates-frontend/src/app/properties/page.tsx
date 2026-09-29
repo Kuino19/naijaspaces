@@ -132,6 +132,7 @@ export default function PropertiesPage() {
           </div>
 
           {viewMode === "list" ? (
+            <>
             <div className="p-6 md:p-16">
               <h1 className="text-4xl md:text-5xl font-serif mb-10 md:mb-16">The Collection.</h1>
               
@@ -201,7 +202,7 @@ export default function PropertiesPage() {
                 MADE BY <a href="https://www.goanitech.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">GOANITECH</a>
               </span>
             </div>
-          </div>
+            </>
           ) : (
             <div className="h-full relative z-0">
                <div className="w-full h-full opacity-90 filter invert-[90%] hue-rotate-180 contrast-125">

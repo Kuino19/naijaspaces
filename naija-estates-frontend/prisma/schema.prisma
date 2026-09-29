@@ -13,34 +13,34 @@ model User {
   name       String?
   password   String
   role       Role       @default(TENANT)
-  properties Property[] // Properties owned/listed by agents
-  payments   Payment[]
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
+  payments   Payment[]
+  properties Property[]
   reviews    Review[]
 }
 
 model Property {
-  id          String       @id @default(uuid())
-  title       String
-  description String
-  price       Float
-  type        PropertyType
-  address     String
-  city        String
-  state       String
-  lat         Float?
-  lng         Float?
-  imageUrl    String?
+  id           String       @id @default(uuid())
+  title        String
+  description  String
+  price        Float
+  type         PropertyType
+  address      String
+  city         String
+  state        String
+  lat          Float?
+  lng          Float?
+  imageUrl     String?
   isAvailable  Boolean      @default(true)
-  rentalPeriod RentalPeriod @default(YEARLY)
-  rating       Float        @default(0) // Average rating
+  rating       Float        @default(0)
   agentId      String
-  agent        User         @relation(fields: [agentId], references: [id])
-  payments     Payment[]
-  reviews      Review[]
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
+  rentalPeriod RentalPeriod @default(YEARLY)
+  payments     Payment[]
+  agent        User         @relation(fields: [agentId], references: [id])
+  reviews      Review[]
 }
 
 model Review {
@@ -48,23 +48,23 @@ model Review {
   rating     Int
   comment    String
   propertyId String
-  property   Property @relation(fields: [propertyId], references: [id])
   userId     String
-  user       User     @relation(fields: [userId], references: [id])
   createdAt  DateTime @default(now())
+  property   Property @relation(fields: [propertyId], references: [id])
+  user       User     @relation(fields: [userId], references: [id])
 }
 
 model Payment {
   id         String        @id @default(uuid())
   amount     Float
   status     PaymentStatus @default(PENDING)
-  reference  String        @unique // Paystack reference
+  reference  String        @unique
   propertyId String
-  property   Property      @relation(fields: [propertyId], references: [id])
   userId     String
-  user       User          @relation(fields: [userId], references: [id])
   createdAt  DateTime      @default(now())
   updatedAt  DateTime      @updatedAt
+  property   Property      @relation(fields: [propertyId], references: [id])
+  user       User          @relation(fields: [userId], references: [id])
 }
 
 enum Role {
@@ -85,7 +85,6 @@ enum PaymentStatus {
   SUCCESS
   FAILED
 }
-
 
 enum RentalPeriod {
   DAILY
