@@ -4,15 +4,24 @@ import Link from "next/link";
 import { Search, ArrowRight, Play, Building, ChevronDown, MapPin } from "lucide-react";
 import { motion } from "framer-motion";
 
-// --- Photorealistic 3D Villa via Sketchfab Embed ---
+// --- Fast & Realistic Hero Image ---
 function RealisticVillaEmbed() {
   return (
-    <iframe 
-      title="Modern Villa 3D Model"
-      className="w-full h-full border-0"
-      allow="autoplay; fullscreen; xr-spatial-tracking"
-      src="https://sketchfab.com/models/35c6623880304df1adb10177a31dcc21/embed?autospin=0.3&autostart=0&transparent=1&ui_animations=0&ui_infos=0&ui_stop=0&ui_inspector=0&ui_watermark_link=0&ui_watermark=0&ui_ar=0&ui_help=0&ui_settings=0&ui_vr=0&ui_fullscreen=0&ui_annotations=0&camera=0&preload=0&dnt=1"
-    />
+    <div className="absolute inset-0 overflow-hidden w-full h-full">
+      <div 
+        className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1613490908578-75c4d6276166?q=80&w=2560&auto=format&fit=crop')] bg-cover bg-center"
+        style={{
+          animation: 'kenburns 20s ease-out infinite alternate'
+        }}
+      />
+      {/* CSS animation inline for simplicity */}
+      <style dangerouslySetInnerHTML={{__html: `
+        @keyframes kenburns {
+          0% { transform: scale(1); }
+          100% { transform: scale(1.1); }
+        }
+      `}} />
+    </div>
   );
 }
 
@@ -120,7 +129,7 @@ export default function PristinePremiumHomePage() {
               <div className="hidden md:block"><span className="text-white text-lg font-semibold mr-1">24/7</span> Support</div>
             </div>
             <div className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-gray-500 bg-white/5 px-4 py-2 rounded-full backdrop-blur-md border border-white/10">
-              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div> Drag to Explore 3D Model
+              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div> Experience Premium Living
             </div>
           </motion.div>
 
