@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Loader2, Eye, EyeOff } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
+import Navbar from "@/components/Navbar";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -29,6 +30,21 @@ export default function LoginPage() {
         throw new Error(error.message || "Login failed");
       }
 
+      // Check user role for smart redirect
+      try {
+        const meRes = await fetch("/api/auth/me");
+        if (meRes.ok) {
+          const meData = await meRes.json();
+          if (meData.role === "TENANT") {
+            router.push("/dashboard/tenant");
+            return;
+          } else if (meData.role === "ADMIN") {
+            router.push("/admin");
+            return;
+          }
+        }
+      } catch (e) {}
+
       router.push("/dashboard");
     } catch (err: any) {
       setError(err.message);
@@ -39,19 +55,13 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col selection:bg-white selection:text-black">
-      <header className="w-full z-50 px-6 py-8 flex justify-between items-center border-b border-white/10">
-        <Link href="/" className="text-xl font-bold tracking-widest uppercase hover:opacity-50 transition-opacity">
-          Naija<span className="font-light">Spaces</span>
-        </Link>
-        <Link href="/" className="flex items-center gap-3 text-xs tracking-widest uppercase hover:opacity-50 transition-opacity">
-          <ArrowLeft className="h-4 w-4" /> Home
-        </Link>
-      </header>
+      <Navbar />
 
-      <main className="flex-1 flex items-center justify-center p-6">
+      <main className="flex-1 flex items-center justify-center p-6 py-12">
         <div className="w-full max-w-md bg-[#111] border border-white/10 p-10">
-          <div className="text-xs uppercase tracking-widest text-gray-500 mb-8">Agent Portal</div>
-          <h1 className="text-3xl font-serif mb-12">Sign In</h1>
+          <div className="text-xs uppercase tracking-widest text-gray-500 mb-8">NaijaSpaces Portal</div>
+          <h1 className="text-3xl font-serif mb-2">Sign In</h1>
+          <p className="text-xs text-gray-400 font-light mb-8">Access your tenant dashboard, saved shortlist, or agent listings.</p>
 
           {error && <div className="bg-red-500/10 text-red-500 text-sm p-4 mb-8 border border-red-500/20">{error}</div>}
 
@@ -97,11 +107,11 @@ export default function LoginPage() {
               disabled={loading}
               className="w-full bg-white text-black py-4 uppercase tracking-[0.2em] text-xs font-bold hover:bg-gray-200 transition-colors flex justify-center items-center mt-8 disabled:opacity-50"
             >
-              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Access Dashboard"}
+              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Access Account"}
             </button>
             
-            <div className="text-center pt-4">
-              <Link href="/register" className="text-xs uppercase tracking-widest text-gray-500 hover:text-white transition-colors">
+            <div className="text-center pt-4 border-t border-white/10">
+              <Link href="/register" className="text-xs uppercase tracking-widest text-gray-400 hover:text-white transition-colors">
                 Need an account? Register
               </Link>
             </div>
