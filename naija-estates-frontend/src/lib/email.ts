@@ -13,7 +13,7 @@ export async function sendEmail({ to, subject, html }: SendEmailParams) {
 
   if (apiKey) {
     try {
-      const fromEmail = process.env.RESEND_FROM_EMAIL || 'NaijaSpaces <onboarding@resend.dev>';
+      const fromEmail = process.env.RESEND_FROM_EMAIL || 'NaijaSpaces <notifications@naijaspaces.app>';
       const res = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
