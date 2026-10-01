@@ -219,9 +219,112 @@ export default function PropertyDetailsPage() {
 
               <div className="mb-16">
                 <h2 className="text-xs uppercase tracking-[0.2em] text-gray-500 mb-6">Property Overview</h2>
-                <p className="text-lg md:text-xl font-light leading-relaxed text-gray-300 whitespace-pre-line">
+                <p className="text-lg md:text-xl font-light leading-relaxed text-gray-300 whitespace-pre-line mb-8">
                   {property.description}
                 </p>
+
+                {/* Social Share Bar */}
+                <div className="flex items-center gap-4 pt-6 border-t border-white/10 text-xs uppercase tracking-widest text-gray-400">
+                  <span>Share Listing:</span>
+                  <a 
+                    href={`https://wa.me/?text=${encodeURIComponent(`Check out ${property.title} on NaijaSpaces: https://naijaspaces.app/properties/${property.id}`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-emerald-400 transition-colors flex items-center gap-1"
+                  >
+                    <MessageSquare className="w-3.5 h-3.5" /> WhatsApp
+                  </a>
+                  <button 
+                    onClick={() => {
+                      navigator.clipboard.writeText(window.location.href);
+                      alert("Property link copied to clipboard!");
+                    }}
+                    className="hover:text-white transition-colors"
+                  >
+                    Copy Link
+                  </button>
+                </div>
+              </div>
+
+              {/* Reviews & Ratings Section (Task 3) */}
+              <div className="mb-16 border-t border-white/10 pt-12">
+                <div className="flex justify-between items-center mb-8">
+                  <h2 className="text-2xl font-serif text-white">Tenant Reviews ({property.reviews?.length || 0})</h2>
+                  {property.rating > 0 && (
+                    <div className="flex items-center gap-1 text-amber-400 font-serif text-xl">
+                      ★ <span>{property.rating} / 5</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Submit Review Form */}
+                <div className="bg-[#111] border border-white/10 p-6 mb-10">
+                  <h3 className="text-sm font-medium uppercase tracking-widest text-gray-300 mb-4">Leave a Verified Review</h3>
+                  
+                  <form onSubmit={async (e) => {
+                    e.preventDefault();
+                    const target = e.target as any;
+                    const rating = target.rating.value;
+                    const comment = target.comment.value;
+                    
+                    try {
+                      const res = await fetch(`/api/properties/${id}/reviews`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ rating, comment })
+                      });
+                      const json = await res.json();
+                      if (res.ok) {
+                        alert("Review submitted successfully!");
+                        window.location.reload();
+                      } else {
+                        alert(json.error || "Failed to submit review.");
+                      }
+                    } catch (err) {
+                      console.error(err);
+                    }
+                  }} className="space-y-4">
+                    <div>
+                      <label className="block text-[10px] uppercase tracking-widest text-gray-500 mb-2">Rating</label>
+                      <select name="rating" required className="bg-[#0a0a0a] border border-white/20 text-white text-sm px-3 py-2 rounded focus:outline-none focus:border-white">
+                        <option value="5">★★★★★ (5 Stars - Excellent)</option>
+                        <option value="4">★★★★☆ (4 Stars - Very Good)</option>
+                        <option value="3">★★★☆☆ (3 Stars - Average)</option>
+                        <option value="2">★★☆☆☆ (2 Stars - Poor)</option>
+                        <option value="1">★☆☆☆☆ (1 Star - Terrible)</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-[10px] uppercase tracking-widest text-gray-500 mb-2">Review Comment</label>
+                      <textarea name="comment" required rows={3} placeholder="Share your experience regarding this property or agent..." className="w-full bg-[#0a0a0a] border border-white/20 p-3 text-sm text-white focus:outline-none focus:border-white resize-none" />
+                    </div>
+
+                    <button type="submit" className="bg-white text-black px-6 py-3 text-xs uppercase tracking-widest font-bold hover:bg-gray-200 transition-colors">
+                      Submit Review
+                    </button>
+                  </form>
+                </div>
+
+                {/* Reviews List */}
+                {property.reviews && property.reviews.length > 0 ? (
+                  <div className="space-y-4">
+                    {property.reviews.map((rev: any) => (
+                      <div key={rev.id} className="border border-white/10 p-6 bg-[#111]">
+                        <div className="flex justify-between items-start mb-2">
+                          <span className="font-serif text-white">{rev.user?.name || "Verified Tenant"}</span>
+                          <span className="text-amber-400 text-xs">{"★".repeat(rev.rating)}</span>
+                        </div>
+                        <p className="text-sm text-gray-300 font-light">{rev.comment}</p>
+                        <span className="text-[10px] text-gray-500 uppercase tracking-widest mt-3 block">
+                          {new Date(rev.createdAt).toLocaleDateString()}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-gray-500 font-light italic">No reviews yet for this property. Be the first to leave one!</p>
+                )}
               </div>
             </div>
 
