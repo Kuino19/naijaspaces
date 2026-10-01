@@ -4,6 +4,9 @@ import { useState, useEffect, use } from "react";
 import Link from "next/link";
 import { ArrowLeft, CheckCircle2, MessageSquare, Phone, Mail, Loader2, Home, MapPin } from "lucide-react";
 
+import Navbar from "@/components/Navbar";
+import Breadcrumbs from "@/components/Breadcrumbs";
+
 export default function AgentProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
   const [agent, setAgent] = useState<any>(null);
@@ -53,15 +56,14 @@ export default function AgentProfilePage({ params }: { params: Promise<{ id: str
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col selection:bg-white selection:text-black">
-      {/* Navigation */}
-      <header className="w-full z-50 px-6 py-8 flex justify-between items-center border-b border-white/10">
-        <Link href="/" className="text-xl font-bold tracking-widest uppercase hover:opacity-50 transition-opacity">
-          Naija<span className="font-light">Spaces</span>
-        </Link>
-        <Link href="/properties" className="flex items-center gap-2 text-xs tracking-widest uppercase hover:opacity-50 transition-opacity">
-          <ArrowLeft className="h-4 w-4" /> Properties
-        </Link>
-      </header>
+      <Navbar />
+
+      <div className="max-w-7xl w-full mx-auto px-6 pt-4">
+        <Breadcrumbs items={[
+          { label: "Agents" },
+          { label: agent.name }
+        ]} />
+      </div>
 
       <main className="flex-1 max-w-7xl w-full mx-auto p-6 md:p-12">
         {/* Profile Card */}

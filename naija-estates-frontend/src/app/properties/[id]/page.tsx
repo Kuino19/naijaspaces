@@ -5,6 +5,9 @@ import { useParams } from "next/navigation";
 import { ArrowLeft, ArrowRight, Loader2, CheckCircle2, MessageSquare, Phone, Heart, User, Layers } from "lucide-react";
 import { useState, useEffect } from "react";
 
+import Navbar from "@/components/Navbar";
+import Breadcrumbs from "@/components/Breadcrumbs";
+
 export default function PropertyDetailsPage() {
   const params = useParams();
   const { id } = params;
@@ -116,22 +119,14 @@ export default function PropertyDetailsPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-white selection:text-black">
-      
-      {/* Header */}
-      <header className="w-full z-50 px-6 py-8 flex justify-between items-center border-b border-white/10">
-        <Link href="/" className="text-xl font-bold tracking-widest uppercase hover:opacity-50 transition-opacity">
-          Naija<span className="font-light">Spaces</span>
-        </Link>
-        <div className="flex items-center gap-6">
-          <Link href="/compare" className="text-xs tracking-widest uppercase text-gray-400 hover:text-white transition-all flex items-center gap-1">
-            <Layers className="w-3.5 h-3.5" /> Compare ({isCompared ? 'Selected' : 'View'})
-          </Link>
-          <div className="h-4 w-px bg-white/20 hidden md:block"></div>
-          <Link href="/properties" className="flex items-center gap-3 text-xs tracking-widest uppercase hover:opacity-50 transition-opacity border-b border-white/30 pb-1">
-            <ArrowLeft className="h-4 w-4" /> Portfolio
-          </Link>
-        </div>
-      </header>
+      <Navbar />
+
+      <div className="max-w-6xl mx-auto px-6 pt-4">
+        <Breadcrumbs items={[
+          { label: "Properties", href: "/properties" },
+          { label: property.title }
+        ]} />
+      </div>
 
       <main className="w-full">
         {/* Gallery / Hero Image */}

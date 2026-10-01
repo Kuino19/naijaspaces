@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
+import Navbar from "@/components/Navbar";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 export default function CheckoutPage() {
   const params = useParams();
@@ -82,15 +84,15 @@ export default function CheckoutPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-white selection:text-black">
-      
-      <header className="w-full px-6 py-8 flex justify-between items-center">
-        <Link href="/" className="text-xl font-bold tracking-widest uppercase hover:opacity-50 transition-opacity">
-          Naija<span className="font-light">Spaces</span>
-        </Link>
-        <Link href={`/properties/${property.id}`} className="flex items-center gap-3 text-xs tracking-widest uppercase hover:opacity-50 transition-opacity">
-          <ArrowLeft className="h-4 w-4" /> Cancel
-        </Link>
-      </header>
+      <Navbar />
+
+      <div className="max-w-7xl mx-auto px-6 pt-4">
+        <Breadcrumbs items={[
+          { label: "Properties", href: "/properties" },
+          { label: property.title, href: `/properties/${property.id}` },
+          { label: "Acquisition Checkout" }
+        ]} />
+      </div>
 
       <div className="max-w-7xl mx-auto px-6 py-12 md:py-24 grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-32">
         
