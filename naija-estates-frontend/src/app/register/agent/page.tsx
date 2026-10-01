@@ -3,14 +3,15 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Loader2, Eye, EyeOff, Building2, UserCheck } from "lucide-react";
+import { ArrowLeft, Loader2, Eye, EyeOff, ShieldCheck, Zap } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import Navbar from "@/components/Navbar";
 
-export default function RegisterPage() {
+export default function AgentRegisterPage() {
   const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -30,11 +31,20 @@ export default function RegisterPage() {
       });
 
       if (error) {
-        throw new Error(error.message || "Registration failed");
+        throw new Error(error.message || "Agent registration failed");
+      }
+
+      // Update phone details via bank/profile route if provided
+      if (phone) {
+        fetch("/api/agent/bank", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ bankName: "Pending", accountNumber: "Pending", accountName: name, phone })
+        }).catch(() => {});
       }
 
       setSuccess(true);
-      setTimeout(() => router.push("/dashboard/tenant"), 1500);
+      setTimeout(() => router.push("/dashboard"), 1500);
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -47,64 +57,75 @@ export default function RegisterPage() {
       <Navbar />
 
       <main className="flex-1 flex items-center justify-center p-6 py-12">
-        <div className="w-full max-w-md bg-[#111] border border-white/10 p-10">
+        <div className="w-full max-w-lg bg-[#111] border border-white/10 p-10">
           <div className="flex justify-between items-center mb-6">
-            <div className="text-xs uppercase tracking-widest text-gray-400 font-semibold flex items-center gap-1.5">
-              <UserCheck className="w-4 h-4 text-white" /> Tenant & Buyer Portal
+            <div className="text-xs uppercase tracking-widest text-emerald-400 font-semibold flex items-center gap-1">
+              <ShieldCheck className="w-4 h-4" /> Agent Partner Portal
             </div>
+            <Link href="/for-agents" className="text-[10px] uppercase tracking-widest text-gray-400 hover:text-white underline">
+              View Agent Offer →
+            </Link>
           </div>
 
-          <h1 className="text-3xl font-serif mb-2">Create Account</h1>
-          <p className="text-xs text-gray-400 font-light mb-6">
-            Save your favorite luxury properties, submit rent/buy applications, and track payments.
+          <h1 className="text-3xl font-serif mb-3">Agent Registration</h1>
+          <p className="text-xs text-gray-400 font-light mb-8">
+            List properties, get direct WhatsApp leads, and manage your portfolio.
           </p>
 
-          <div className="bg-white/5 border border-white/10 p-4 mb-8 text-xs rounded flex items-center justify-between">
-            <div>
-              <p className="text-gray-300 font-medium">Are you a Real Estate Agent?</p>
-              <p className="text-gray-500 text-[11px] mt-0.5">Get 1st month free + list your properties.</p>
+          <div className="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs p-4 mb-8 rounded font-medium space-y-1">
+            <div className="flex items-center gap-1.5 font-bold">
+              <Zap className="w-4 h-4 text-emerald-400 shrink-0" /> PROMO UNLOCKED: 1st Month 100% FREE!
             </div>
-            <Link 
-              href="/register/agent" 
-              className="px-3 py-1.5 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded text-[11px] font-semibold tracking-wider uppercase hover:bg-emerald-500 hover:text-black transition-all shrink-0 ml-3"
-            >
-              Agent Register →
-            </Link>
+            <p className="text-[11px] text-emerald-300/80 font-normal">
+              List unlimited properties free for 30 days. Standard membership is ₦1,500/month flat fee + 5% sales commission.
+            </p>
           </div>
 
           {success && (
             <div className="bg-green-500/10 text-green-400 text-sm p-4 mb-8 border border-green-500/20">
-              Account created successfully! Redirecting to your Tenant Portal...
+              Agent account created! Redirecting to command center...
             </div>
           )}
           {error && <div className="bg-red-500/10 text-red-500 text-sm p-4 mb-8 border border-red-500/20">{error}</div>}
 
           <form onSubmit={handleRegister} className="space-y-6">
-            <div className="relative">
-              <label className="block text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-2">Full Name</label>
+            <div>
+              <label className="block text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-2">Full Legal Name or Agency Name</label>
               <input 
                 type="text" 
                 required
                 value={name}
                 onChange={e => setName(e.target.value)}
-                placeholder="e.g. Tunde Adeniyi"
+                placeholder="e.g. Chief Emeka Orogun or Apex Realty"
                 className="w-full text-base font-light bg-transparent border-b border-white/20 pb-2 focus:outline-none focus:border-white transition-colors" 
               />
             </div>
             
-            <div className="relative">
-              <label className="block text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-2">Email Address</label>
+            <div>
+              <label className="block text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-2">Business Email Address</label>
               <input 
                 type="email" 
                 required
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                placeholder="your.email@domain.com"
+                placeholder="agent@agency.ng"
+                className="w-full text-base font-light bg-transparent border-b border-white/20 pb-2 focus:outline-none focus:border-white transition-colors" 
+              />
+            </div>
+
+            <div>
+              <label className="block text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-2">WhatsApp / Phone Line for Client Leads</label>
+              <input 
+                type="tel" 
+                required
+                value={phone}
+                onChange={e => setPhone(e.target.value)}
+                placeholder="e.g. 08012345678"
                 className="w-full text-base font-light bg-transparent border-b border-white/20 pb-2 focus:outline-none focus:border-white transition-colors" 
               />
             </div>
             
-            <div className="relative">
+            <div>
               <label className="block text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-2">Password</label>
               <div className="relative">
                 <input 
@@ -129,15 +150,15 @@ export default function RegisterPage() {
               disabled={loading}
               className="w-full bg-white text-black py-4 uppercase tracking-[0.2em] text-xs font-bold hover:bg-gray-200 transition-colors flex justify-center items-center mt-8 disabled:opacity-50"
             >
-              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Create Tenant Account"}
+              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Claim Free Month & Register as Agent"}
             </button>
             
             <div className="text-center pt-4 border-t border-white/10 flex justify-between items-center text-xs">
               <Link href="/login" className="text-gray-400 hover:text-white uppercase tracking-widest">
-                Already registered? Sign In
+                Existing Agent? Sign In
               </Link>
-              <Link href="/for-agents" className="text-emerald-400 hover:underline uppercase tracking-widest text-[11px]">
-                Agent Partner Program →
+              <Link href="/register" className="text-gray-400 hover:text-white uppercase tracking-widest">
+                Tenant Sign Up →
               </Link>
             </div>
           </form>

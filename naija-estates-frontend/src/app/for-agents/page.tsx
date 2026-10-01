@@ -36,7 +36,7 @@ export default function ForAgentsLandingPage() {
 
             <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
               <Link 
-                href="/register" 
+                href="/register/agent" 
                 className="bg-white text-black px-8 py-5 text-center text-xs font-bold uppercase tracking-[0.2em] hover:bg-gray-200 transition-all flex items-center justify-center gap-3"
               >
                 Claim Free Month & Register <ArrowRight className="w-4 h-4" />
@@ -198,7 +198,7 @@ export default function ForAgentsLandingPage() {
               </div>
 
               <Link 
-                href="/register" 
+                href="/register/agent" 
                 className="w-full bg-emerald-600 text-white text-center py-4 text-xs font-bold uppercase tracking-[0.2em] hover:bg-emerald-500 transition-colors block"
               >
                 Start Free Month Now
@@ -236,7 +236,7 @@ export default function ForAgentsLandingPage() {
               </div>
 
               <Link 
-                href="/register" 
+                href="/register/agent" 
                 className="w-full border border-white/30 text-white text-center py-4 text-xs font-bold uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-colors block"
               >
                 Register as Agent
@@ -253,7 +253,7 @@ export default function ForAgentsLandingPage() {
               Start listing your property portfolio today with your 1st month 100% free.
             </p>
             <Link 
-              href="/register" 
+              href="/register/agent" 
               className="bg-black text-white px-10 py-5 text-xs font-bold uppercase tracking-[0.2em] hover:bg-gray-800 transition-colors inline-block"
             >
               Get Started Free →
