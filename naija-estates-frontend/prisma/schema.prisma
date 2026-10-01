@@ -8,20 +8,25 @@ datasource db {
 }
 
 model User {
-  id         String     @id @default(uuid())
-  email      String     @unique
+  id         String      @id @default(uuid())
+  email      String      @unique
   name       String?
   password   String
-  role       Role       @default(TENANT)
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  role       Role        @default(TENANT)
+  phone      String?
+  whatsapp   String?
+  avatarUrl  String?
+  isVerified Boolean     @default(false)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
   payments   Payment[]
   properties Property[]
   reviews    Review[]
+  favourites Favourite[]
 }
 
 model Property {
-  id           String       @id @default(uuid())
+  id           String          @id @default(uuid())
   title        String
   description  String
   price        Float
@@ -32,15 +37,37 @@ model Property {
   lat          Float?
   lng          Float?
   imageUrl     String?
-  isAvailable  Boolean      @default(true)
-  rating       Float        @default(0)
+  isAvailable  Boolean         @default(true)
+  isVerified   Boolean         @default(false)
+  rating       Float           @default(0)
   agentId      String
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
-  rentalPeriod RentalPeriod @default(YEARLY)
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  rentalPeriod RentalPeriod    @default(YEARLY)
   payments     Payment[]
-  agent        User         @relation(fields: [agentId], references: [id])
+  agent        User            @relation(fields: [agentId], references: [id])
   reviews      Review[]
+  images       PropertyImage[]
+  favourites   Favourite[]
+}
+
+model PropertyImage {
+  id         String   @id @default(uuid())
+  url        String
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+}
+
+model Favourite {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@unique([userId, propertyId])
 }
 
 model Review {
@@ -48,10 +75,10 @@ model Review {
   rating     Int
   comment    String
   propertyId String
-  userId     String
-  createdAt  DateTime @default(now())
   property   Property @relation(fields: [propertyId], references: [id])
+  userId     String
   user       User     @relation(fields: [userId], references: [id])
+  createdAt  DateTime @default(now())
 }
 
 model Payment {

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { LanguageProvider } from "@/lib/LanguageContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,15 +23,10 @@ export const metadata: Metadata = {
   authors: [{ name: "NaijaSpaces" }],
   creator: "NaijaSpaces",
   publisher: "NaijaSpaces",
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
   openGraph: {
     title: "NaijaSpaces | Premium Nigerian Real Estate",
     description: "Discover Nigeria's most exceptional real estate. NaijaSpaces offers an exclusive portfolio of luxury mansions, penthouses, commercial shops, and short-term rentals.",
-    url: "https://naijaspaces.com", // update to actual domain when ready
+    url: "https://naijaspaces.app",
     siteName: "NaijaSpaces",
     images: [
       {
@@ -49,26 +45,19 @@ export const metadata: Metadata = {
     description: "Discover Nigeria's most exceptional real estate, from luxury penthouses to commercial shops and short-let apartments.",
     images: ["https://images.unsplash.com/photo-1613490908578-75c4d6276166?q=80&w=1200&auto=format&fit=crop"],
   },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <LanguageProvider>
+          {children}
+        </LanguageProvider>
+      </body>
     </html>
   );
 }

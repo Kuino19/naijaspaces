@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { Search, ArrowRight, Play, Building, ChevronDown, MapPin } from "lucide-react";
+import { Search, ArrowRight, Play, Building, ChevronDown, MapPin, CheckCircle2, Globe, Star, Quote } from "lucide-react";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/lib/LanguageContext";
 
-// --- Fast & Realistic Hero Image ---
 function RealisticVillaEmbed() {
   return (
     <div className="absolute inset-0 overflow-hidden w-full h-full">
@@ -14,7 +14,6 @@ function RealisticVillaEmbed() {
           animation: 'kenburns 20s ease-out infinite alternate'
         }}
       />
-      {/* CSS animation inline for simplicity */}
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes kenburns {
           0% { transform: scale(1); }
@@ -25,10 +24,9 @@ function RealisticVillaEmbed() {
   );
 }
 
-
-// --- Main Page ---
 export default function PristinePremiumHomePage() {
-  
+  const { lang, toggleLanguage, t } = useLanguage();
+
   const fadeUp: any = {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.2, 0.65, 0.3, 0.9] } }
@@ -41,6 +39,27 @@ export default function PristinePremiumHomePage() {
       transition: { staggerChildren: 0.15, delayChildren: 0.2 }
     }
   };
+
+  const testimonials = [
+    {
+      quote: "NaijaSpaces made finding my duplex in Lekki Phase 1 seamless. The verified badge gave me confidence before paying.",
+      name: "Chief Emeka Orogun",
+      role: "Property Investor, Lagos",
+      rating: 5,
+    },
+    {
+      quote: "No long story! I got my short-let apartment in Maitama within 24 hours. The WhatsApp direct link to the verified agent saved me time.",
+      name: "Dr. Amina Bello",
+      role: "Medical Consultant, Abuja",
+      rating: 5,
+    },
+    {
+      quote: "As a licensed real estate agent in Port Harcourt, listing on NaijaSpaces doubled my client inquiries in 30 days.",
+      name: "Tunde Bakare",
+      role: "Lead Agent, Apex Realty",
+      rating: 5,
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white overflow-x-hidden selection:bg-white selection:text-black">
@@ -58,14 +77,23 @@ export default function PristinePremiumHomePage() {
           <Building className="h-5 w-5" />
           <span>Naija<span className="font-light">Spaces</span></span>
         </div>
-        <nav className="hidden md:flex gap-12 text-sm font-medium tracking-widest uppercase">
+        <nav className="hidden md:flex gap-10 text-xs font-medium tracking-widest uppercase">
           <Link href="/properties" className="hover:opacity-50 transition-opacity">Residences</Link>
-          <Link href="/properties" className="hover:opacity-50 transition-opacity">Estates</Link>
-          <Link href="/about" className="hover:opacity-50 transition-opacity">The Agency</Link>
+          <Link href="/compare" className="hover:opacity-50 transition-opacity">Compare</Link>
+          <Link href="/dashboard/tenant" className="hover:opacity-50 transition-opacity">Tenant Portal</Link>
         </nav>
-        <div className="flex gap-6 text-sm font-medium tracking-widest uppercase items-center">
-          <Link href="/login" className="hover:opacity-50 transition-opacity">Agent Login</Link>
-          <Link href="/dashboard" className="border border-white/20 px-5 py-2 hover:bg-white hover:text-black transition-all duration-300 hidden md:block">List Property</Link>
+        <div className="flex gap-4 text-xs font-medium tracking-widest uppercase items-center">
+          {/* Language Switcher */}
+          <button 
+            onClick={toggleLanguage}
+            className="flex items-center gap-1.5 px-3 py-1.5 border border-white/20 rounded-full hover:bg-white/10 transition-colors"
+          >
+            <Globe className="w-3.5 h-3.5 text-gray-400" />
+            <span className="text-gray-300 font-bold">{lang === 'en' ? 'ENG' : 'PIDGIN'}</span>
+          </button>
+
+          <Link href="/login" className="hover:opacity-50 transition-opacity hidden sm:block">Agent Login</Link>
+          <Link href="/dashboard" className="border border-white/20 px-4 py-2 hover:bg-white hover:text-black transition-all duration-300 hidden md:block">List Property</Link>
         </div>
       </motion.header>
 
@@ -73,39 +101,36 @@ export default function PristinePremiumHomePage() {
         {/* ===== HERO SECTION ===== */}
         <section className="relative h-screen w-full flex flex-col justify-end pb-20 px-6 md:px-20 pt-32">
           
-          {/* Photorealistic 3D Model */}
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 2, ease: "easeOut" }}
             className="absolute top-0 right-0 w-full md:w-[60%] h-full z-[2]"
           >
-             <RealisticVillaEmbed />
+            <RealisticVillaEmbed />
             <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] via-[#0a0a0a]/70 md:via-transparent to-transparent pointer-events-none"></div>
             <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent pointer-events-none"></div>
           </motion.div>
 
-          {/* Hero Text */}
           <motion.div 
             variants={staggerContainer}
             initial="hidden"
             animate="visible"
             className="relative z-10 max-w-xl pointer-events-none"
           >
-            <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-[9rem] font-serif leading-[0.9] tracking-tighter mb-8">
+            <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-[8rem] font-serif leading-[0.9] tracking-tighter mb-8">
               <motion.span variants={fadeUp} className="block text-gray-300 font-sans text-xs md:text-sm tracking-[0.3em] uppercase mb-6 ml-2">Defining Luxury</motion.span>
-              <motion.span variants={fadeUp} className="block">The Art Of</motion.span>
-              <motion.span variants={fadeUp} className="block italic font-light text-gray-400">Living.</motion.span>
+              <motion.span variants={fadeUp} className="block">{t('heroTitle')}</motion.span>
             </h1>
             
-            <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-start md:items-end mt-12 md:mt-24">
+            <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-start md:items-end mt-12 md:mt-20">
               <motion.p variants={fadeUp} className="text-gray-300 max-w-md text-base md:text-lg font-light leading-relaxed">
-                Curating Nigeria's most exceptional real estate. Discover our exclusive portfolio of luxury mansions, commercial spaces, and premium short-term rentals.
+                {t('heroSubtitle')} Discover verified homes, penthouses, commercial shops, and short-term rentals.
               </motion.p>
               
               <motion.div variants={fadeUp} className="pointer-events-auto">
                 <Link href="/properties" className="group flex items-center gap-4 md:gap-6 pb-4 border-b border-white/30 hover:border-white transition-colors cursor-pointer">
-                  <span className="uppercase tracking-[0.2em] text-xs md:text-sm">Explore Portfolio</span>
+                  <span className="uppercase tracking-[0.2em] text-xs md:text-sm">{t('exploreBtn')}</span>
                   <div className="w-10 h-10 rounded-full border border-white flex items-center justify-center group-hover:bg-white group-hover:text-black transition-colors duration-300">
                     <ArrowRight className="h-4 w-4" />
                   </div>
@@ -114,7 +139,7 @@ export default function PristinePremiumHomePage() {
             </div>
           </motion.div>
 
-          {/* Trust Stats + Interactive Model Badge */}
+          {/* Trust Stats */}
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -124,16 +149,15 @@ export default function PristinePremiumHomePage() {
             <div className="flex gap-8 text-white/50 text-xs uppercase tracking-widest">
               <div><span className="text-white text-lg font-semibold mr-1">5,000+</span> Listings</div>
               <div className="hidden md:block w-px h-5 bg-white/20"></div>
-              <div className="hidden md:block"><span className="text-white text-lg font-semibold mr-1">100%</span> Verified</div>
+              <div className="hidden md:block"><span className="text-white text-lg font-semibold mr-1">100%</span> Verified Agents</div>
               <div className="hidden md:block w-px h-5 bg-white/20"></div>
-              <div className="hidden md:block"><span className="text-white text-lg font-semibold mr-1">24/7</span> Support</div>
+              <div className="hidden md:block"><span className="text-white text-lg font-semibold mr-1">24/7</span> Instant Support</div>
             </div>
             <div className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-gray-500 bg-white/5 px-4 py-2 rounded-full backdrop-blur-md border border-white/10">
-              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div> Experience Premium Living
+              <CheckCircle2 className="w-3.5 h-3.5 text-green-400" /> Verified Nigerian Real Estate
             </div>
           </motion.div>
 
-          {/* Scroll Indicator */}
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -146,7 +170,7 @@ export default function PristinePremiumHomePage() {
           </motion.div>
         </section>
 
-        {/* ===== SEARCH SECTION ===== */}
+        {/* ===== SEARCH & DISCOVER ===== */}
         <section className="bg-white text-black py-24 md:py-32 px-6 md:px-20">
           <motion.div 
             initial="hidden"
@@ -164,16 +188,17 @@ export default function PristinePremiumHomePage() {
                 <label className="block text-xs uppercase tracking-widest text-gray-500 mb-2">Location</label>
                 <input 
                   type="text" 
-                  placeholder="Lekki, Ikoyi, Maitama..." 
-                  className="w-full text-2xl md:text-4xl font-light bg-transparent border-b border-black/20 pb-4 focus:outline-none focus:border-black transition-colors placeholder:text-gray-300"
+                  placeholder="Lekki, Ikoyi, Maitama, Port Harcourt..." 
+                  className="w-full text-2xl md:text-3xl font-light bg-transparent border-b border-black/20 pb-4 focus:outline-none focus:border-black transition-colors placeholder:text-gray-300"
                 />
               </div>
               <div className="relative group">
                 <label className="block text-xs uppercase tracking-widest text-gray-500 mb-2">Property Type</label>
-                <select className="w-full text-xl md:text-2xl font-light bg-transparent border-b border-black/20 pb-5 focus:outline-none focus:border-black transition-colors cursor-pointer appearance-none">
-                  <option value="">All Residences</option>
-                  <option value="apartment">Penthouses</option>
-                  <option value="house">Villas & Estates</option>
+                <select className="w-full text-xl font-light bg-transparent border-b border-black/20 pb-5 focus:outline-none focus:border-black transition-colors cursor-pointer appearance-none">
+                  <option value="">All Properties</option>
+                  <option value="apartment">Houses & Apartments</option>
+                  <option value="commercial">Shops & Commercial</option>
+                  <option value="land">Plots of Land</option>
                 </select>
               </div>
               <div className="flex items-end justify-end mt-4 md:mt-0">
@@ -185,138 +210,57 @@ export default function PristinePremiumHomePage() {
           </motion.div>
         </section>
 
-        {/* ===== FEATURED RESIDENCES ===== */}
-        <section className="py-24 md:py-32 px-6 md:px-20 bg-[#0a0a0a]">
+        {/* ===== TESTIMONIALS & SOCIAL PROOF (FEATURE #14) ===== */}
+        <section className="py-24 md:py-32 px-6 md:px-20 bg-[#111] border-t border-white/10">
           <div className="max-w-7xl mx-auto">
-            <motion.div 
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={staggerContainer}
-              className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 md:mb-24 gap-6"
-            >
-              <motion.h2 variants={fadeUp} className="text-5xl md:text-7xl font-serif text-white leading-none">
-                Featured <br/> <span className="italic text-gray-500 font-light">Residences.</span>
-              </motion.h2>
-              <motion.div variants={fadeUp}>
-                <Link href="/properties" className="flex items-center gap-4 uppercase tracking-[0.2em] text-xs hover:text-gray-300 transition-colors border-b border-white/50 pb-2 hover:border-white">
-                  View Full Gallery <ArrowRight className="h-4 w-4" />
-                </Link>
-              </motion.div>
-            </motion.div>
+            <div className="mb-16 text-center max-w-2xl mx-auto">
+              <span className="text-xs uppercase tracking-[0.2em] text-gray-400">{t('testimonialsTitle')}</span>
+              <h2 className="text-4xl md:text-5xl font-serif text-white mt-2">Trusted by Buyers, Tenants & Top Agents</h2>
+            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-16 items-start">
-              {/* Large Hero Property */}
-              <motion.div 
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
-                className="md:col-span-7 group cursor-pointer"
-              >
-                <Link href="/properties/1" className="block">
-                  <div className="relative aspect-[4/5] overflow-hidden mb-8 bg-[#111]">
-                    <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80" className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-[1.5s] ease-out opacity-90 group-hover:opacity-100" alt="Banana Island Mansion" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent transition-opacity duration-500"></div>
-                    {/* Hover reveal arrow */}
-                    <div className="absolute bottom-8 right-8 w-14 h-14 bg-white rounded-full flex items-center justify-center text-black opacity-0 group-hover:opacity-100 transition-opacity duration-500 shadow-lg">
-                      <ArrowRight className="h-5 w-5 -rotate-45" />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {testimonials.map((tItem, idx) => (
+                <div key={idx} className="bg-[#0a0a0a] border border-white/10 p-8 flex flex-col justify-between">
+                  <div>
+                    <div className="flex gap-1 text-amber-400 mb-6">
+                      {[...Array(tItem.rating)].map((_, i) => (
+                        <Star key={i} className="w-4 h-4 fill-current" />
+                      ))}
                     </div>
+                    <p className="text-gray-300 font-light text-base leading-relaxed mb-8 italic">
+                      "{tItem.quote}"
+                    </p>
                   </div>
-                  <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-3">
-                    <div>
-                      <div className="flex items-center gap-2 text-sm uppercase tracking-[0.2em] text-gray-400 mb-3">
-                        <MapPin className="h-3.5 w-3.5" /> Banana Island, Ikoyi
-                      </div>
-                      <h3 className="text-3xl md:text-4xl font-serif">The Genesis Mansion</h3>
-                    </div>
-                    <div className="text-xl md:text-2xl font-light text-gray-300">₦150,000,000 / yr</div>
-                  </div>
-                </Link>
-              </motion.div>
 
-              {/* Stacked properties */}
-              <div className="md:col-span-5 flex flex-col gap-20 lg:mt-24">
-                {[
-                  { img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80", title: "Oceanview Penthouse", loc: "Eko Atlantic City", price: "₦45,000,000 / year" },
-                  { img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80", title: "The Glass Villa", loc: "Maitama, Abuja", price: "₦85,000,000 / year" }
-                ].map((item, i) => (
-                  <motion.div 
-                    key={i}
-                    initial={{ opacity: 0, y: 50 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8, delay: i * 0.15 }}
-                    className="group cursor-pointer"
-                  >
-                    <Link href={`/properties/${i + 2}`} className="block">
-                      <div className="relative aspect-[16/10] overflow-hidden mb-6 bg-[#111]">
-                        <img src={item.img} className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-[1.5s] ease-out opacity-90 group-hover:opacity-100" alt={item.title} />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-2 text-sm uppercase tracking-[0.2em] text-gray-400 mb-3">
-                          <MapPin className="h-3.5 w-3.5" /> {item.loc}
-                        </div>
-                        <h3 className="text-2xl font-serif mb-2">{item.title}</h3>
-                        <div className="text-gray-300 font-light text-lg">{item.price}</div>
-                      </div>
-                    </Link>
-                  </motion.div>
-                ))}
-              </div>
+                  <div className="pt-6 border-t border-white/10">
+                    <div className="font-serif text-lg text-white">{tItem.name}</div>
+                    <div className="text-xs uppercase tracking-widest text-gray-500 mt-1">{tItem.role}</div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* ===== VIDEO / LIFESTYLE ===== */}
-        <section className="relative h-[60vh] md:h-[80vh] w-full flex items-center justify-center overflow-hidden border-y border-white/10">
-          <motion.img 
-            initial={{ scale: 1.1 }}
-            whileInView={{ scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1.5 }}
-            src="https://images.unsplash.com/photo-1449844908441-8829872d2607?ixlib=rb-4.0.3&auto=format&fit=crop&w=2850&q=80" 
-            className="absolute inset-0 w-full h-full object-cover object-center opacity-40 grayscale" alt="Lifestyle" 
-          />
-          <div className="absolute inset-0 bg-black/50"></div>
-          
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1 }}
-            className="relative z-10 text-center flex flex-col items-center px-4"
-          >
-            <button className="w-20 h-20 md:w-24 md:h-24 rounded-full border border-white/50 backdrop-blur-md flex items-center justify-center mb-8 hover:bg-white hover:text-black transition-colors duration-300 group">
-              <Play className="h-6 w-6 md:h-8 md:w-8 ml-2 group-hover:scale-110 transition-transform" />
-            </button>
-            <h2 className="text-3xl md:text-6xl font-serif mb-6 text-white">Experience the Extraordinary.</h2>
-            <p className="uppercase tracking-[0.2em] md:tracking-[0.3em] text-xs text-gray-300">Watch the NaijaEstates Film</p>
-          </motion.div>
-        </section>
-
         {/* ===== FOOTER ===== */}
-        <footer className="bg-gradient-to-b from-[#0a0a0a] to-[#050505] text-white pt-24 pb-12 px-6 md:px-20">
-          {/* CTA Block */}
+        <footer className="bg-gradient-to-b from-[#0a0a0a] to-[#050505] text-white pt-24 pb-12 px-6 md:px-20 border-t border-white/10">
           <div className="max-w-7xl mx-auto flex flex-col items-center text-center mb-28">
             <h2 className="text-4xl md:text-6xl font-serif mb-8 max-w-2xl leading-tight">
-              Ready to acquire your next masterpiece?
+              Ready to acquire your next crib?
             </h2>
             <Link href="/properties" className="border border-white/30 bg-transparent text-white px-12 py-5 uppercase tracking-[0.2em] text-xs font-bold hover:bg-white hover:text-black transition-all duration-300">
               Enter The Collection
             </Link>
           </div>
 
-          {/* Footer Grid */}
           <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 border-t border-white/10 pt-16 mb-16">
             <div className="md:col-span-2">
               <div className="text-xl font-bold tracking-widest uppercase flex items-center gap-2 mb-6">
                 <Building className="h-5 w-5" />
-                <span>Naija<span className="font-light">Estates</span></span>
+                <span>Naija<span className="font-light">Spaces</span></span>
               </div>
               <p className="text-gray-400 font-light max-w-sm leading-relaxed">
-                Nigeria's premier private real estate agency, curating the most exceptional homes and estates for the world's most discerning clientele.
+                Nigeria's premier private real estate platform, curating verified homes, shops, and short-term rentals for discerning clientele.
               </p>
             </div>
             
@@ -330,19 +274,16 @@ export default function PristinePremiumHomePage() {
             </div>
             
             <div>
-              <h4 className="uppercase tracking-widest text-xs font-bold mb-6 text-white">Connect</h4>
-              <div className="flex gap-6 mb-8">
-                <a href="#" className="text-gray-400 hover:text-white transition-colors font-bold text-sm tracking-widest">IG</a>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors font-bold text-sm tracking-widest">TW</a>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors font-bold text-sm tracking-widest">IN</a>
+              <h4 className="uppercase tracking-widest text-xs font-bold mb-6 text-white">Navigation</h4>
+              <div className="flex flex-col space-y-3 text-sm text-gray-400">
+                <Link href="/properties" className="hover:text-white">Properties</Link>
+                <Link href="/compare" className="hover:text-white">Compare Properties</Link>
+                <Link href="/dashboard/tenant" className="hover:text-white">Tenant Dashboard</Link>
+                <Link href="/admin" className="hover:text-white">Admin Dashboard</Link>
               </div>
-              <a href="mailto:contact@naijaestates.com" className="text-sm font-light text-gray-400 hover:text-white transition-colors border-b border-gray-600 pb-1 hover:border-white">
-                contact@naijaestates.com
-              </a>
             </div>
           </div>
 
-          {/* Copyright */}
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-[10px] uppercase tracking-widest text-gray-600 border-t border-white/5 pt-8">
             <div className="flex flex-col md:flex-row gap-4 items-center">
               <span>© {new Date().getFullYear()} NAIJASPACES. ALL RIGHTS RESERVED.</span>
@@ -350,10 +291,6 @@ export default function PristinePremiumHomePage() {
               <span>
                 MADE BY <a href="https://www.goanitech.com" target="_blank" rel="noopener noreferrer" className="text-white hover:underline transition-all">GOANITECH</a>
               </span>
-            </div>
-            <div className="flex gap-8 mt-4 md:mt-0">
-              <Link href="#" className="hover:text-gray-300 transition-colors">Privacy Policy</Link>
-              <Link href="#" className="hover:text-gray-300 transition-colors">Terms of Service</Link>
             </div>
           </div>
         </footer>

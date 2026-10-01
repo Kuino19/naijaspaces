@@ -8,9 +8,17 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
       where: { id: resolvedParams.id },
       include: {
         agent: {
-          select: { name: true, email: true }
+          select: { id: true, name: true, email: true, phone: true, whatsapp: true, avatarUrl: true, isVerified: true }
         },
-        reviews: true
+        images: true,
+        reviews: {
+          include: {
+            user: {
+              select: { name: true, avatarUrl: true }
+            }
+          },
+          orderBy: { createdAt: 'desc' }
+        }
       }
     });
     
