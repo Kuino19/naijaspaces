@@ -54,8 +54,16 @@ export default function RegisterPage() {
 
       <main className="flex-1 flex items-center justify-center p-6 py-12">
         <div className="w-full max-w-md bg-[#111] border border-white/10 p-10">
-          <div className="text-xs uppercase tracking-widest text-gray-500 mb-8">Agent Portal</div>
-          <h1 className="text-3xl font-serif mb-12">Create Account</h1>
+          <div className="flex justify-between items-center mb-8">
+            <div className="text-xs uppercase tracking-widest text-gray-500">Agent Portal</div>
+            <Link href="/for-agents" className="text-[10px] uppercase tracking-widest text-emerald-400 hover:underline">
+              Agent Benefits →
+            </Link>
+          </div>
+          <h1 className="text-3xl font-serif mb-4">Create Account</h1>
+          <div className="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs p-3.5 mb-8 rounded font-medium">
+            🎉 <strong>1st Month FREE Promo!</strong> (Then ₦1,500/mo flat fee + 5% sales commission)
+          </div>
 
           {success && <div className="bg-green-500/10 text-green-400 text-sm p-4 mb-8 border border-green-500/20">Account created successfully! Redirecting to dashboard...</div>}
           {error && <div className="bg-red-500/10 text-red-500 text-sm p-4 mb-8 border border-red-500/20">{error}</div>}

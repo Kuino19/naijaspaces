@@ -23,6 +23,7 @@ export default function Navbar() {
         {/* Desktop Nav Links */}
         <nav className="hidden md:flex gap-8 text-xs font-medium tracking-widest uppercase items-center">
           <Link href="/properties" className="hover:text-gray-400 transition-colors">Residences</Link>
+          <Link href="/for-agents" className="text-emerald-400 hover:text-emerald-300 transition-colors">For Agents</Link>
           <Link href="/compare" className="hover:text-gray-400 transition-colors">Compare</Link>
           <Link href="/dashboard/tenant" className="hover:text-gray-400 transition-colors">{t('tenantPortal')}</Link>
           <Link href="/dashboard" className="hover:text-gray-400 transition-colors">{t('agentPortal')}</Link>
@@ -76,6 +77,14 @@ export default function Navbar() {
               className="block text-2xl font-serif text-white hover:text-gray-400 transition-colors"
             >
               The Collection (Residences)
+            </Link>
+
+            <Link 
+              href="/for-agents" 
+              onClick={closeMobileMenu}
+              className="block text-xl font-serif text-emerald-400 hover:text-emerald-300 transition-colors"
+            >
+              For Agents (1st Month Free)
             </Link>
 
             <Link 
