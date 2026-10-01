@@ -8,21 +8,25 @@ datasource db {
 }
 
 model User {
-  id         String      @id @default(uuid())
-  email      String      @unique
-  name       String?
-  password   String
-  role       Role        @default(TENANT)
-  phone      String?
-  whatsapp   String?
-  avatarUrl  String?
-  isVerified Boolean     @default(false)
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
-  payments   Payment[]
-  properties Property[]
-  reviews    Review[]
-  favourites Favourite[]
+  id                    String      @id @default(uuid())
+  email                 String      @unique
+  name                  String?
+  password              String
+  role                  Role        @default(TENANT)
+  phone                 String?
+  whatsapp              String?
+  avatarUrl             String?
+  isVerified            Boolean     @default(false)
+  bankName              String?
+  accountNumber         String?
+  accountName           String?
+  paystackSubaccountCode String?
+  createdAt             DateTime    @default(now())
+  updatedAt             DateTime    @updatedAt
+  payments              Payment[]
+  properties            Property[]
+  reviews               Review[]
+  favourites            Favourite[]
 }
 
 model Property {
