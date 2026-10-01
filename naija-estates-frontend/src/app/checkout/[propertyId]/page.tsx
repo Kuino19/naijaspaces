@@ -2,20 +2,27 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
-import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
+import { useParams, useSearchParams } from "next/navigation";
+import { ArrowLeft, ArrowRight, Loader2, CheckCircle2 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Breadcrumbs from "@/components/Breadcrumbs";
 
 export default function CheckoutPage() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const { propertyId } = params;
   
   const [property, setProperty] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [duration, setDuration] = useState(1);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [error, setError] = useState("");
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+
+  const isSuccessParam = searchParams.get("status") === "success";
 
   useEffect(() => {
     if (!propertyId) return;
@@ -31,15 +38,44 @@ export default function CheckoutPage() {
       });
   }, [propertyId]);
 
-  const handlePayment = (e: React.FormEvent) => {
+  const handlePayment = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsProcessing(true);
-    
-    // Simulate payment
-    setTimeout(() => {
+    setError("");
+
+    const basePrice = (property.price || 0) * duration;
+    const agencyPremium = basePrice * 0.05;
+    const legalFees = basePrice * 0.02;
+    const totalAmount = basePrice + agencyPremium + legalFees;
+
+    try {
+      const res = await fetch("/api/payments/paystack/initialize", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          name,
+          phone,
+          amount: totalAmount,
+          propertyId,
+          duration
+        })
+      });
+
+      const json = await res.json();
+
+      if (!res.ok || json.error) {
+        throw new Error(json.error || "Payment initialization failed");
+      }
+
+      // Redirect to live Paystack authorization URL
+      if (json.authorization_url) {
+        window.location.href = json.authorization_url;
+      }
+    } catch (err: any) {
+      setError(err.message || "Something went wrong initializing payment.");
       setIsProcessing(false);
-      setPaymentSuccess(true);
-    }, 2500);
+    }
   };
 
   if (loading) {
@@ -61,14 +97,17 @@ export default function CheckoutPage() {
     );
   }
 
-  if (paymentSuccess) {
+  if (isSuccessParam) {
     return (
       <div className="min-h-screen bg-[#0a0a0a] text-white flex items-center justify-center p-6 selection:bg-white selection:text-black">
-        <div className="max-w-xl w-full text-center">
-          <h2 className="text-5xl md:text-7xl font-serif mb-6 leading-none">Transaction <br/><span className="italic font-light text-gray-500">Authorized.</span></h2>
-          <p className="text-xl font-light text-gray-400 mb-12">Your acquisition of {property.title} has been initiated. Our private office will contact you shortly.</p>
-          <Link href="/properties" className="inline-block border-b border-white pb-2 uppercase tracking-[0.2em] text-xs hover:text-gray-400 hover:border-gray-400 transition-colors">
-            Return to Portfolio
+        <div className="max-w-xl w-full text-center bg-[#111] border border-white/10 p-12">
+          <CheckCircle2 className="w-16 h-16 text-green-400 mx-auto mb-6" />
+          <h2 className="text-4xl font-serif mb-4 leading-none">Payment Successful</h2>
+          <p className="text-gray-300 font-light mb-8">
+            Your transaction reference <code className="bg-white/10 px-2 py-1 text-xs text-white">{searchParams.get("reference")}</code> has been verified via Paystack.
+          </p>
+          <Link href="/dashboard/tenant" className="inline-block bg-white text-black px-8 py-4 uppercase tracking-[0.2em] text-xs font-bold hover:bg-gray-200 transition-colors">
+            Go to Tenant Dashboard
           </Link>
         </div>
       </div>
@@ -148,17 +187,44 @@ export default function CheckoutPage() {
         <div className="md:pt-32">
           <h3 className="text-sm uppercase tracking-[0.2em] text-gray-500 mb-8">Client Details</h3>
           
+          {error && (
+            <div className="bg-red-500/10 text-red-400 text-sm p-4 mb-6 border border-red-500/20">
+              {error}
+            </div>
+          )}
+
           <form onSubmit={handlePayment} className="space-y-8">
             <div className="relative group">
-              <input type="text" required placeholder="Full Legal Name" className="w-full text-2xl font-light bg-transparent border-b border-white/20 pb-4 focus:outline-none focus:border-white transition-colors placeholder:text-gray-700" />
+              <input 
+                type="text" 
+                required 
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Full Legal Name" 
+                className="w-full text-2xl font-light bg-transparent border-b border-white/20 pb-4 focus:outline-none focus:border-white transition-colors placeholder:text-gray-700" 
+              />
             </div>
             
             <div className="relative group">
-              <input type="email" required placeholder="Private Email" className="w-full text-2xl font-light bg-transparent border-b border-white/20 pb-4 focus:outline-none focus:border-white transition-colors placeholder:text-gray-700" />
+              <input 
+                type="email" 
+                required 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email Address" 
+                className="w-full text-2xl font-light bg-transparent border-b border-white/20 pb-4 focus:outline-none focus:border-white transition-colors placeholder:text-gray-700" 
+              />
             </div>
             
             <div className="relative group">
-              <input type="tel" required placeholder="Phone Number" className="w-full text-2xl font-light bg-transparent border-b border-white/20 pb-4 focus:outline-none focus:border-white transition-colors placeholder:text-gray-700" />
+              <input 
+                type="tel" 
+                required 
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="Phone Number" 
+                className="w-full text-2xl font-light bg-transparent border-b border-white/20 pb-4 focus:outline-none focus:border-white transition-colors placeholder:text-gray-700" 
+              />
             </div>
 
             <div className="pt-12">
@@ -167,8 +233,12 @@ export default function CheckoutPage() {
                 disabled={isProcessing}
                 className="w-full bg-white text-black py-6 uppercase tracking-[0.2em] text-sm font-bold hover:bg-gray-200 transition-all flex justify-center items-center gap-3 disabled:opacity-50"
               >
-                {isProcessing ? "Authorizing..." : (
-                  <>Secure Payment <ArrowRight className="h-4 w-4" /></>
+                {isProcessing ? (
+                  <span className="flex items-center gap-2">
+                    <Loader2 className="w-4 h-4 animate-spin" /> Redirecting to Paystack...
+                  </span>
+                ) : (
+                  <>Pay ₦{total.toLocaleString()} with Paystack <ArrowRight className="h-4 w-4" /></>
                 )}
               </button>
             </div>
