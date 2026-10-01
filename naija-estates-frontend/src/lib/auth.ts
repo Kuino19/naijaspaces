@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma';
 export { auth } from './auth-config';
 import { auth } from './auth-config';
+import { sendEmail, buildWelcomeEmail } from './email';
 
 export const getSession = async () => {
   const { data: result } = await auth.getSession();
@@ -21,6 +22,13 @@ export const getSession = async () => {
         role: "AGENT",
       },
     });
+
+    // Send Welcome Email asynchronously
+    sendEmail({
+      to: dbUser.email,
+      subject: 'Welcome to NaijaSpaces!',
+      html: buildWelcomeEmail(dbUser.name || 'User')
+    }).catch(err => console.error("Error sending welcome email:", err));
   }
 
   return {

@@ -13,6 +13,7 @@ export async function sendEmail({ to, subject, html }: SendEmailParams) {
 
   if (apiKey) {
     try {
+      const fromEmail = process.env.RESEND_FROM_EMAIL || 'NaijaSpaces <onboarding@resend.dev>';
       const res = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
@@ -20,13 +21,15 @@ export async function sendEmail({ to, subject, html }: SendEmailParams) {
           'Authorization': `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-          from: 'NaijaSpaces <notifications@naijaspaces.app>',
+          from: fromEmail,
           to,
           subject,
           html,
         }),
       });
-      return await res.json();
+      const data = await res.json();
+      console.log('[RESEND API RESULT]:', data);
+      return data;
     } catch (err) {
       console.error('Failed to send email via Resend:', err);
     }
