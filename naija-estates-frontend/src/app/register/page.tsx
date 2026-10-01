@@ -13,6 +13,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const handleRegister = async (e: React.FormEvent) => {
@@ -31,7 +32,8 @@ export default function RegisterPage() {
         throw new Error(error.message || "Registration failed");
       }
 
-      router.push("/dashboard");
+      setSuccess(true);
+      setTimeout(() => router.push("/dashboard"), 1500);
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -55,6 +57,7 @@ export default function RegisterPage() {
           <div className="text-xs uppercase tracking-widest text-gray-500 mb-8">Agent Portal</div>
           <h1 className="text-3xl font-serif mb-12">Create Account</h1>
 
+          {success && <div className="bg-green-500/10 text-green-400 text-sm p-4 mb-8 border border-green-500/20">Account created successfully! Redirecting to dashboard...</div>}
           {error && <div className="bg-red-500/10 text-red-500 text-sm p-4 mb-8 border border-red-500/20">{error}</div>}
 
           <form onSubmit={handleRegister} className="space-y-8">
