@@ -71,7 +71,7 @@ export default function ForAgentsLandingPage() {
             </motion.div>
 
             <motion.div 
-              className="lg:col-span-5 relative"
+              className="lg:col-span-5 relative mt-12 lg:mt-0"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.4 }}
@@ -79,11 +79,11 @@ export default function ForAgentsLandingPage() {
               <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 to-emerald-900/20 rounded-xl blur-xl opacity-50"></div>
               <div className="bg-black/40 backdrop-blur-xl border border-white/10 p-8 md:p-10 relative rounded-xl shadow-2xl">
                 <div className="absolute -top-3 -right-3 bg-emerald-500 text-black text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-sm shadow-lg">
-                  PROMO UNLOCKED
+                  {t('promoUnlocked')}
                 </div>
 
                 <div className="text-[10px] uppercase tracking-[0.3em] text-emerald-400 font-bold mb-8 flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4" /> Agent Terms
+                  <ShieldCheck className="w-4 h-4" /> {t('agentTermsLbl')}
                 </div>
                 
                 <div className="space-y-8 mb-8">
@@ -92,8 +92,8 @@ export default function ForAgentsLandingPage() {
                       <Award className="w-5 h-5 text-emerald-400" />
                     </div>
                     <div className="pt-1">
-                      <h4 className="text-lg font-serif text-white leading-tight">First Month Subscription</h4>
-                      <p className="text-sm text-gray-400 font-light mt-1">₦0 (100% FREE for your first 30 days)</p>
+                      <h4 className="text-lg font-serif text-white leading-tight">{t('firstMonthSub')}</h4>
+                      <p className="text-sm text-gray-400 font-light mt-1">{t('firstMonthDesc')}</p>
                     </div>
                   </div>
 
@@ -102,8 +102,8 @@ export default function ForAgentsLandingPage() {
                       <DollarSign className="w-5 h-5 text-amber-400" />
                     </div>
                     <div className="pt-1">
-                      <h4 className="text-lg font-serif text-white leading-tight">Monthly Membership</h4>
-                      <p className="text-sm text-gray-400 font-light mt-1">₦1,500 / month flat subscription after trial</p>
+                      <h4 className="text-lg font-serif text-white leading-tight">{t('monthlyMem')}</h4>
+                      <p className="text-sm text-gray-400 font-light mt-1">{t('monthlyMemDesc')}</p>
                     </div>
                   </div>
 
@@ -112,14 +112,14 @@ export default function ForAgentsLandingPage() {
                       <CheckCircle2 className="w-5 h-5 text-blue-400" />
                     </div>
                     <div className="pt-1">
-                      <h4 className="text-lg font-serif text-white leading-tight">NaijaSpaces Commission</h4>
-                      <p className="text-sm text-gray-400 font-light mt-1">We add a 5% platform fee on top of your asking price.</p>
+                      <h4 className="text-lg font-serif text-white leading-tight">{t('naijaSpacesCom')}</h4>
+                      <p className="text-sm text-gray-400 font-light mt-1">{t('naijaSpacesComDesc')}</p>
                     </div>
                   </div>
                 </div>
 
                 <div className="pt-6 border-t border-white/10 text-[11px] text-gray-500 text-center font-medium">
-                  Cancel or pause anytime from your dashboard.
+                  {t('cancelAnytime')}
                 </div>
               </div>
             </motion.div>
@@ -137,8 +137,8 @@ export default function ForAgentsLandingPage() {
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.8 }}
             >
-              <span className="text-[10px] uppercase tracking-[0.3em] text-emerald-400 font-bold mb-4 block">Why Top Agents Choose Us</span>
-              <h2 className="text-4xl md:text-5xl font-serif text-white tracking-tight">Built Exclusively for <br className="hidden md:block"/> Real Estate Pros</h2>
+              <span className="text-[10px] uppercase tracking-[0.3em] text-emerald-400 font-bold mb-4 block">{t('whyTopAgents')}</span>
+              <h2 className="text-4xl md:text-5xl font-serif text-white tracking-tight">{t('builtExclusive')}</h2>
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -151,8 +151,8 @@ export default function ForAgentsLandingPage() {
                     text: "text-emerald-400",
                     glow: "bg-emerald-500/20"
                   },
-                  title: "Guaranteed Targeted Traffic",
-                  desc: "We run high-budget campaigns across Google & Meta to drive qualified, high-net-worth tenants directly to your listings."
+                  title: t('feat1Title'),
+                  desc: t('feat1Desc')
                 },
                 {
                   icon: ShieldCheck,
@@ -162,8 +162,8 @@ export default function ForAgentsLandingPage() {
                     text: "text-blue-400",
                     glow: "bg-blue-500/20"
                   },
-                  title: "Verified Agent Badge",
-                  desc: "Instantly build client trust. Verified partner agents get 4x more direct inquiries and zero time-wasting interactions."
+                  title: t('feat2Title'),
+                  desc: t('feat2Desc')
                 },
                 {
                   icon: MessageSquare,
@@ -173,8 +173,8 @@ export default function ForAgentsLandingPage() {
                     text: "text-emerald-400",
                     glow: "bg-emerald-500/20"
                   },
-                  title: "Direct WhatsApp Leads",
-                  desc: "No middlemen or delayed forwards. Interested buyers click once to start a direct WhatsApp chat or phone call with you."
+                  title: t('feat3Title'),
+                  desc: t('feat3Desc')
                 },
                 {
                   icon: Users,
@@ -184,8 +184,8 @@ export default function ForAgentsLandingPage() {
                     text: "text-amber-400",
                     glow: "bg-amber-500/20"
                   },
-                  title: "Agent Command Center",
-                  desc: "Upload HD galleries, set custom lease terms (Shortlet, Yearly, Sale), and easily manage your payout bank account."
+                  title: t('feat4Title'),
+                  desc: t('feat4Desc')
                 }
               ].map((feature, i) => (
                 <motion.div 
@@ -219,8 +219,8 @@ export default function ForAgentsLandingPage() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8 }}
           >
-            <span className="text-[10px] uppercase tracking-[0.3em] text-emerald-400 font-bold mb-4 block">Seamless Onboarding</span>
-            <h2 className="text-4xl md:text-5xl font-serif text-white tracking-tight">How It Works in 3 Simple Steps</h2>
+            <span className="text-[10px] uppercase tracking-[0.3em] text-emerald-400 font-bold mb-4 block">{t('seamlessOnboard')}</span>
+            <h2 className="text-4xl md:text-5xl font-serif text-white tracking-tight">{t('howItWorks')}</h2>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
@@ -230,18 +230,18 @@ export default function ForAgentsLandingPage() {
             {[
               {
                 step: "01",
-                title: "Create Free Agent Account",
-                desc: "Sign up in under 60 seconds with your email and WhatsApp contact number. Your 1st month subscription fee is 100% waived."
+                title: t('step1Title'),
+                desc: t('step1Desc')
               },
               {
                 step: "02",
-                title: "Upload Properties & Set Price",
-                desc: "Input your net asking price. Our platform automatically adds our 5% commission on top so buyers pay the total price transparently."
+                title: t('step2Title'),
+                desc: t('step2Desc')
               },
               {
                 step: "03",
-                title: "Receive Direct Leads & Payments",
-                desc: "Get direct WhatsApp inquiries or automated Paystack bank payouts sent straight to your verified Nigerian bank account."
+                title: t('step3Title'),
+                desc: t('step3Desc')
               }
             ].map((item, i) => (
               <motion.div 
@@ -276,8 +276,8 @@ export default function ForAgentsLandingPage() {
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.8 }}
             >
-              <span className="text-[10px] uppercase tracking-[0.3em] text-emerald-400 font-bold mb-4 block">Transparent Pricing</span>
-              <h2 className="text-4xl md:text-5xl font-serif text-white tracking-tight">Zero Hidden Charges</h2>
+              <span className="text-[10px] uppercase tracking-[0.3em] text-emerald-400 font-bold mb-4 block">{t('transPricing')}</span>
+              <h2 className="text-4xl md:text-5xl font-serif text-white tracking-tight">{t('zeroHidden')}</h2>
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
@@ -292,11 +292,11 @@ export default function ForAgentsLandingPage() {
                 <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
                 <div className="relative z-10">
                   <span className="bg-emerald-500/10 text-emerald-400 text-[10px] font-bold uppercase tracking-[0.2em] px-4 py-2 border border-emerald-500/20 inline-block mb-6 rounded-full">
-                    PROMO OFFER
+                    {t('promoOffer')}
                   </span>
-                  <h3 className="text-2xl font-serif text-white mb-2">1st Month Trial</h3>
+                  <h3 className="text-2xl font-serif text-white mb-2">{t('firstMonthTrial')}</h3>
                   <div className="text-5xl font-serif text-white mb-8">
-                    ₦0 <span className="text-sm font-sans font-light text-gray-400">for 30 days</span>
+                    ₦0 <span className="text-sm font-sans font-light text-gray-400">{t('for30days')}</span>
                   </div>
                   
                   <ul className="space-y-4 text-sm text-gray-300 font-light mb-10">
@@ -319,7 +319,7 @@ export default function ForAgentsLandingPage() {
                   href="/register/agent" 
                   className="relative w-full bg-emerald-500 text-black text-center py-5 text-xs font-bold uppercase tracking-[0.2em] transition-all block rounded overflow-hidden group-hover:bg-emerald-400"
                 >
-                  <span className="relative z-10">Start Free Month Now</span>
+                  <span className="relative z-10">{t('startFreeMonth')}</span>
                 </Link>
               </motion.div>
 
@@ -333,11 +333,11 @@ export default function ForAgentsLandingPage() {
               >
                 <div>
                   <span className="bg-white/5 text-gray-400 text-[10px] font-bold uppercase tracking-[0.2em] px-4 py-2 inline-block mb-6 rounded-full border border-white/10">
-                    STANDARD PLAN
+                    {t('standardPlan')}
                   </span>
-                  <h3 className="text-2xl font-serif text-white mb-2">Monthly Membership</h3>
+                  <h3 className="text-2xl font-serif text-white mb-2">{t('monthlyMem')}</h3>
                   <div className="text-5xl font-serif text-white mb-8">
-                    ₦1,500 <span className="text-sm font-sans font-light text-gray-400">/ month</span>
+                    ₦1,500 <span className="text-sm font-sans font-light text-gray-400">{t('perMonthTxt')}</span>
                   </div>
                   
                   <ul className="space-y-4 text-sm text-gray-300 font-light mb-10">
@@ -360,7 +360,7 @@ export default function ForAgentsLandingPage() {
                   href="/register/agent" 
                   className="w-full border border-white/20 text-white text-center py-5 text-xs font-bold uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-colors block rounded"
                 >
-                  Register as Agent
+                  {t('regAsAgent')}
                 </Link>
               </motion.div>
             </div>
@@ -370,35 +370,35 @@ export default function ForAgentsLandingPage() {
         {/* ===== FAQ SECTION FOR AGENTS ===== */}
         <section id="faq" className="py-24 px-6 md:px-20 max-w-5xl mx-auto scroll-mt-20">
           <div className="text-center mb-16">
-            <span className="text-xs uppercase tracking-[0.2em] text-emerald-400 font-semibold">Agent FAQ</span>
-            <h2 className="text-3xl md:text-4xl font-serif text-white mt-2">Frequently Asked Questions</h2>
+            <span className="text-xs uppercase tracking-[0.2em] text-emerald-400 font-semibold">{t('agentFaq')}</span>
+            <h2 className="text-3xl md:text-4xl font-serif text-white mt-2">{t('faqTitle')}</h2>
           </div>
 
           <div className="space-y-6">
             <div className="bg-[#111] border border-white/10 p-6 rounded">
               <h3 className="text-lg font-serif text-white mb-2 flex items-center gap-2">
-                <HelpCircle className="w-4 h-4 text-emerald-400" /> How does the 5% platform cut work with my asking price?
+                <HelpCircle className="w-4 h-4 text-emerald-400" /> {t('faq1Q')}
               </h3>
               <p className="text-sm text-gray-400 font-light leading-relaxed pl-6">
-                When you list a property for ₦2,000,000, our system adds our 5% platform commission on top (₦100,000). The total price displayed to the buyer on Paystack checkout is ₦2,100,000. You receive 100% of your ₦2,000,000 asking price directly into your bank account!
+                {t('faq1A')}
               </p>
             </div>
 
             <div className="bg-[#111] border border-white/10 p-6 rounded">
               <h3 className="text-lg font-serif text-white mb-2 flex items-center gap-2">
-                <HelpCircle className="w-4 h-4 text-emerald-400" /> How do I receive my 1st Month Free?
+                <HelpCircle className="w-4 h-4 text-emerald-400" /> {t('faq2Q')}
               </h3>
               <p className="text-sm text-gray-400 font-light leading-relaxed pl-6">
-                Simply click "Claim Free Month" and complete your agent registration. You do not need a credit card. Your listing privileges activate immediately for 30 days.
+                {t('faq2A')}
               </p>
             </div>
 
             <div className="bg-[#111] border border-white/10 p-6 rounded">
               <h3 className="text-lg font-serif text-white mb-2 flex items-center gap-2">
-                <HelpCircle className="w-4 h-4 text-emerald-400" /> Can I list short-lets, rentals, and outright sales?
+                <HelpCircle className="w-4 h-4 text-emerald-400" /> {t('faq3Q')}
               </h3>
               <p className="text-sm text-gray-400 font-light leading-relaxed pl-6">
-                Yes! NaijaSpaces supports daily/monthly short-let stays, yearly residential rentals, commercial leases, and outright land/building sales.
+                {t('faq3A')}
               </p>
             </div>
           </div>
@@ -407,15 +407,15 @@ export default function ForAgentsLandingPage() {
         {/* ===== CTA FOOTER ===== */}
         <section className="bg-emerald-500 text-black py-20 px-6 text-center">
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-4xl md:text-5xl font-serif mb-6 font-bold">Join 500+ Verified Nigerian Agents</h2>
+            <h2 className="text-4xl md:text-5xl font-serif mb-6 font-bold">{t('joinAgentsTitle')}</h2>
             <p className="text-black/80 text-lg font-normal mb-8">
-              Start listing your property portfolio today with your 1st month 100% free.
+              {t('joinAgentsDesc')}
             </p>
             <Link 
               href="/register/agent" 
               className="bg-black text-white px-10 py-5 text-xs font-bold uppercase tracking-[0.2em] hover:bg-gray-900 transition-colors inline-block shadow-2xl"
             >
-              Get Started Free →
+              {t('getStartedFree')}
             </Link>
           </div>
         </section>

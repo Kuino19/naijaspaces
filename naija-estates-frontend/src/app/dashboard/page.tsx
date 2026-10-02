@@ -17,6 +17,12 @@ export default function DashboardPage() {
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState("");
 
+  const [showBankForm, setShowBankForm] = useState(false);
+  const [bankData, setBankData] = useState({ bankName: "", bankCode: "", accountNumber: "", accountName: "" });
+  const [savingBank, setSavingBank] = useState(false);
+  const [banks, setBanks] = useState<{name: string, code: string}[]>([]);
+  const [resolvingName, setResolvingName] = useState(false);
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -32,7 +38,111 @@ export default function DashboardPage() {
 
   useEffect(() => {
     fetchMyProperties();
+    fetchBankDetails();
+    fetchBanks();
   }, []);
+
+  const fetchBanks = async () => {
+    try {
+      const res = await fetch("/api/agent/bank/list");
+      if (res.ok) {
+        const data = await res.json();
+        const banksList = data.data || [];
+        setBanks(banksList);
+        
+        setBankData(prev => {
+          if (prev.bankName && !prev.bankCode) {
+            const matched = banksList.find((b: any) => b.name === prev.bankName);
+            if (matched) {
+              return { ...prev, bankCode: matched.code };
+            }
+          }
+          return prev;
+        });
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    if (bankData.accountNumber.length === 10 && bankData.bankCode) {
+      resolveAccount();
+    }
+  }, [bankData.accountNumber, bankData.bankCode]);
+
+  const resolveAccount = async () => {
+    setResolvingName(true);
+    try {
+      const res = await fetch(`/api/agent/bank/resolve?accountNumber=${bankData.accountNumber}&bankCode=${bankData.bankCode}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.status) {
+          setBankData(prev => ({ ...prev, accountName: data.data.account_name }));
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setResolvingName(false);
+    }
+  };
+
+  const fetchBankDetails = async () => {
+    try {
+      const res = await fetch("/api/agent/bank");
+      if (res.ok) {
+        const data = await res.json();
+        setBankData(prev => {
+          let code = prev.bankCode;
+          if (data.bankName) {
+            // try to match with banks state if already loaded, though this might happen before banks load
+            setBanks(currentBanks => {
+              const matched = currentBanks.find((b: any) => b.name === data.bankName);
+              if (matched) {
+                // If we match, we still need to set it in bankData.
+                // It's easier to just let fetchBanks handle setting bankCode if it arrives later,
+                // But if it's already here, we can set it.
+                code = matched.code;
+              }
+              return currentBanks;
+            });
+          }
+          return {
+            ...prev,
+            bankName: data.bankName || "",
+            accountNumber: data.accountNumber || "",
+            accountName: data.accountName || "",
+            bankCode: code
+          };
+        });
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleBankSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSavingBank(true);
+    try {
+      const res = await fetch("/api/agent/bank", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(bankData)
+      });
+      if (res.ok) {
+        alert("Bank details saved successfully!");
+        setShowBankForm(false);
+      } else {
+        alert("Failed to save bank details.");
+      }
+    } catch(err) {
+      console.error(err);
+    } finally {
+      setSavingBank(false);
+    }
+  };
 
   const fetchMyProperties = async () => {
     try {
@@ -198,19 +308,87 @@ export default function DashboardPage() {
       </div>
 
       <main className="flex-1 max-w-7xl w-full mx-auto p-6 md:p-12">
-        <div className="flex justify-between items-end mb-12 border-b border-white/10 pb-6">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12 border-b border-white/10 pb-6">
           <div>
             <span className="text-xs uppercase tracking-widest text-gray-500">Agent Command Center</span>
             <h1 className="text-4xl font-serif text-white mt-1">Portfolio Manager</h1>
           </div>
-          <button 
-            onClick={showAddForm ? closeForm : () => setShowAddForm(true)}
-            className="flex items-center gap-2 border border-white px-6 py-3 text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors"
-          >
-            {showAddForm ? <X className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
-            {showAddForm ? "Cancel" : "New Listing"}
-          </button>
+          <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
+            <button 
+              onClick={() => {
+                setShowBankForm(!showBankForm);
+                setShowAddForm(false);
+              }}
+              className="flex items-center justify-center gap-2 border border-white/20 px-6 py-3 text-xs uppercase tracking-widest hover:bg-white/10 transition-colors w-full md:w-auto"
+            >
+              Payout Settings
+            </button>
+            <button 
+              onClick={() => {
+                setShowAddForm(!showAddForm);
+                setShowBankForm(false);
+                if(!showAddForm) closeForm();
+              }}
+              className="flex items-center justify-center gap-2 border border-white px-6 py-3 text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors w-full md:w-auto"
+            >
+              {showAddForm ? <X className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+              {showAddForm ? "Cancel" : "New Listing"}
+            </button>
+          </div>
         </div>
+
+        {/* Bank Details Form */}
+        {showBankForm && (
+          <div className="bg-[#111] p-8 border border-white/10 mb-12 animate-in fade-in slide-in-from-top-4">
+            <h2 className="text-2xl font-serif mb-8 border-b border-white/10 pb-4 flex items-center gap-2">
+              Payout Bank Settings
+            </h2>
+            <form onSubmit={handleBankSubmit} className="max-w-2xl">
+              <div className="space-y-6">
+                <div>
+                  <label className="block text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-2">Bank Name</label>
+                  <input 
+                    required 
+                    list="bank-list"
+                    value={bankData.bankName} 
+                    onChange={e => {
+                      const val = e.target.value;
+                      const selectedBank = banks.find(b => b.name === val);
+                      setBankData({...bankData, bankName: val, bankCode: selectedBank?.code || ""});
+                    }} 
+                    placeholder="Search for your bank..."
+                    className="w-full bg-transparent border-b border-white/20 pb-2 focus:outline-none focus:border-white text-lg font-light"
+                  />
+                  <datalist id="bank-list">
+                    {banks.map(b => (
+                      <option key={b.code} value={b.name} />
+                    ))}
+                  </datalist>
+                </div>
+                <div>
+                  <label className="block text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-2">Account Number</label>
+                  <input required value={bankData.accountNumber} onChange={e => setBankData({...bankData, accountNumber: e.target.value})} className="w-full bg-transparent border-b border-white/20 pb-2 focus:outline-none focus:border-white text-lg font-light" placeholder="e.g. 0123456789" />
+                </div>
+                <div>
+                  <label className="block text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-2">Account Name</label>
+                  <div className="relative">
+                    <input required readOnly value={bankData.accountName} onChange={e => setBankData({...bankData, accountName: e.target.value})} className="w-full bg-transparent border-b border-white/20 pb-2 focus:outline-none focus:border-white text-lg font-light" placeholder="e.g. John Doe Properties" />
+                    {resolvingName && <Loader2 className="w-4 h-4 animate-spin absolute right-2 top-1/2 -translate-y-1/2 text-gray-400" />}
+                  </div>
+                </div>
+                
+                <div className="pt-4 flex flex-col sm:flex-row gap-4">
+                  <button type="submit" disabled={savingBank} className="bg-white text-black px-10 py-4 uppercase tracking-widest text-xs font-bold hover:bg-gray-200 transition-colors disabled:opacity-50">
+                    {savingBank ? "Saving..." : "Save Bank Details"}
+                  </button>
+                  <button type="button" onClick={() => setShowBankForm(false)} className="border border-white/20 text-gray-400 px-8 py-4 uppercase tracking-widest text-xs hover:text-white transition-colors">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        )}
 
         {/* Form Modal / Accordion */}
         {showAddForm && (
@@ -229,7 +407,7 @@ export default function DashboardPage() {
                   <label className="block text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-2">Description</label>
                   <textarea required value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} rows={3} className="w-full bg-transparent border-b border-white/20 pb-2 focus:outline-none focus:border-white text-lg font-light resize-none" placeholder="Property narrative & features..." />
                 </div>
-                <div className="flex gap-4">
+                <div className="flex flex-col sm:flex-row gap-4">
                   <div className="flex-1">
                     <label className="block text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-2">Price (₦)</label>
                     <input type="number" required value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} className="w-full bg-transparent border-b border-white/20 pb-2 focus:outline-none focus:border-white text-lg font-light" placeholder="e.g. 15000000" />
@@ -247,7 +425,7 @@ export default function DashboardPage() {
               </div>
 
               <div className="space-y-6">
-                <div className="flex gap-4">
+                <div className="flex flex-col sm:flex-row gap-4">
                   <div className="flex-1">
                     <label className="block text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-2">City & State</label>
                     <input required value={formData.city} onChange={e => setFormData({...formData, city: e.target.value})} className="w-full bg-transparent border-b border-white/20 pb-2 focus:outline-none focus:border-white text-lg font-light" placeholder="e.g. Lagos" />
@@ -307,7 +485,7 @@ export default function DashboardPage() {
                 </div>
               </div>
 
-              <div className="md:col-span-2 pt-6 flex gap-4">
+              <div className="md:col-span-2 pt-6 flex flex-col sm:flex-row gap-4">
                 <button type="submit" disabled={submitting} className="bg-white text-black px-10 py-4 uppercase tracking-widest text-xs font-bold hover:bg-gray-200 transition-colors disabled:opacity-50">
                   {submitting ? "Saving Listing..." : editingProperty ? "Save Changes" : "Publish Listing"}
                 </button>

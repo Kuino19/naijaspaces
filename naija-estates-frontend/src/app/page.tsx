@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { Search, ArrowRight, Play, Building, ChevronDown, MapPin, CheckCircle2, Globe, Star, Quote } from "lucide-react";
 import { motion } from "framer-motion";
@@ -27,6 +28,8 @@ function RealisticVillaEmbed() {
 
 export default function PristinePremiumHomePage() {
   const { lang, toggleLanguage, t } = useLanguage();
+  const [searchLocation, setSearchLocation] = useState("");
+  const [searchType, setSearchType] = useState("");
 
   const fadeUp: any = {
     hidden: { opacity: 0, y: 30 },
@@ -153,30 +156,41 @@ export default function PristinePremiumHomePage() {
             className="max-w-7xl mx-auto"
           >
             <motion.h2 variants={fadeUp} className="text-3xl md:text-5xl font-serif mb-12 md:mb-16 max-w-2xl leading-tight">
-              Begin your journey to exceptional real estate.
+              {t('beginJourney')}
             </motion.h2>
             
             <motion.div variants={fadeUp} className="grid grid-cols-1 md:grid-cols-4 gap-8 border-t border-black/10 pt-12">
               <div className="md:col-span-2 relative group">
-                <label className="block text-xs uppercase tracking-widest text-gray-500 mb-2">Location</label>
+                <label className="block text-xs uppercase tracking-widest text-gray-500 mb-2">{t('locationLbl')}</label>
                 <input 
                   type="text" 
+                  value={searchLocation}
+                  onChange={(e) => setSearchLocation(e.target.value)}
                   placeholder="Lekki, Ikoyi, Maitama, Port Harcourt..." 
                   className="w-full text-2xl md:text-3xl font-light bg-transparent border-b border-black/20 pb-4 focus:outline-none focus:border-black transition-colors placeholder:text-gray-300"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      window.location.href = `/properties?location=${encodeURIComponent(searchLocation)}&type=${encodeURIComponent(searchType)}`;
+                    }
+                  }}
                 />
               </div>
               <div className="relative group">
-                <label className="block text-xs uppercase tracking-widest text-gray-500 mb-2">Property Type</label>
-                <select className="w-full text-xl font-light bg-transparent border-b border-black/20 pb-5 focus:outline-none focus:border-black transition-colors cursor-pointer appearance-none">
-                  <option value="">All Properties</option>
-                  <option value="apartment">Houses & Apartments</option>
-                  <option value="commercial">Shops & Commercial</option>
-                  <option value="land">Plots of Land</option>
+                <label className="block text-xs uppercase tracking-widest text-gray-500 mb-2">{t('propTypeLbl')}</label>
+                <select 
+                  value={searchType}
+                  onChange={(e) => setSearchType(e.target.value)}
+                  className="w-full text-xl font-light bg-transparent border-b border-black/20 pb-5 focus:outline-none focus:border-black transition-colors cursor-pointer appearance-none"
+                >
+                  <option value="">{t('allProperties')}</option>
+                  <option value="apartment">{t('residential')}</option>
+                  <option value="commercial">{t('commercial')}</option>
+                  <option value="land">{t('plotsOfLand')}</option>
                 </select>
               </div>
               <div className="flex items-end justify-end mt-4 md:mt-0">
-                <Link href="/properties" className="w-full md:w-auto bg-black text-white px-12 py-5 uppercase tracking-[0.2em] text-xs hover:bg-gray-800 transition-colors flex items-center justify-center gap-3">
-                  <Search className="h-4 w-4" /> Discover
+                <Link href={`/properties?location=${encodeURIComponent(searchLocation)}&type=${encodeURIComponent(searchType)}`} className="w-full md:w-auto bg-black text-white px-12 py-5 uppercase tracking-[0.2em] text-xs hover:bg-gray-800 transition-colors flex items-center justify-center gap-3">
+                  <Search className="h-4 w-4" /> {t('discoverBtn')}
                 </Link>
               </div>
             </motion.div>
@@ -188,7 +202,7 @@ export default function PristinePremiumHomePage() {
           <div className="max-w-7xl mx-auto">
             <div className="mb-16 text-center max-w-2xl mx-auto">
               <span className="text-xs uppercase tracking-[0.2em] text-gray-400">{t('testimonialsTitle')}</span>
-              <h2 className="text-4xl md:text-5xl font-serif text-white mt-2">Trusted by Buyers, Tenants & Top Agents</h2>
+              <h2 className="text-4xl md:text-5xl font-serif text-white mt-2">{t('trustedBy')}</h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -219,10 +233,10 @@ export default function PristinePremiumHomePage() {
         <footer className="bg-gradient-to-b from-[#0a0a0a] to-[#050505] text-white pt-24 pb-12 px-6 md:px-20 border-t border-white/10">
           <div className="max-w-7xl mx-auto flex flex-col items-center text-center mb-28">
             <h2 className="text-4xl md:text-6xl font-serif mb-8 max-w-2xl leading-tight">
-              Ready to acquire your next crib?
+              {t('readyToAcquire')}
             </h2>
             <Link href="/properties" className="border border-white/30 bg-transparent text-white px-12 py-5 uppercase tracking-[0.2em] text-xs font-bold hover:bg-white hover:text-black transition-all duration-300">
-              Enter The Collection
+              {t('enterCollection')}
             </Link>
           </div>
 

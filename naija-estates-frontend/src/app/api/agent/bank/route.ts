@@ -33,10 +33,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { bankName, accountNumber, accountName } = await request.json();
+    const { bankName, bankCode, accountNumber, accountName } = await request.json();
 
-    if (!bankName || !accountNumber || !accountName) {
-      return NextResponse.json({ error: 'Bank Name, Account Number, and Account Name are required' }, { status: 400 });
+    if (!bankName || !bankCode || !accountNumber || !accountName) {
+      return NextResponse.json({ error: 'Bank Name, Bank Code, Account Number, and Account Name are required' }, { status: 400 });
     }
 
     const paystackSecret = process.env.PAYSTACK_SECRET_KEY;
@@ -53,7 +53,7 @@ export async function POST(request: Request) {
           },
           body: JSON.stringify({
             business_name: accountName,
-            settlement_bank: bankName,
+            settlement_bank: bankCode,
             account_number: accountNumber,
             percentage_charge: 5, // 5% retained by main platform account
           })

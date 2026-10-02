@@ -138,7 +138,7 @@ export function buildReceiptEmail(name: string, propertyTitle: string, amount: n
         </tr>
         <tr>
           <td style="padding: 16px; color: #ffffff; font-weight: 700; font-size: 14px;">Total Amount Paid</td>
-          <td style="padding: 16px; text-align: right; color: #10b981; font-weight: 700; font-size: 18px;">₦${amount.toLocaleString()}</td>
+          <td style="padding: 16px; text-align: right; color: #10b981; font-weight: 700; font-size: 18px;">&#8358;${amount.toLocaleString()}</td>
         </tr>
       </tbody>
     </table>
@@ -167,6 +167,27 @@ export function buildPasswordResetEmail(name: string, resetLink: string) {
     <p style="color: #777777; font-size: 12px; line-height: 1.5; margin-top: 24px; border-t: 1px solid #222222; padding-top: 16px;">
       If you did not request a password reset, no action is needed. Your account remains secure.
     </p>
+  `;
+  return wrapEmailLayout(content);
+}
+export function buildAgentNotificationEmail(agentName: string, propertyTitle: string, amount: number, tenantName: string) {
+  const content = `
+    <div class="badge" style="background-color: rgba(16, 185, 129, 0.15); color: #10b981; border-color: rgba(16, 185, 129, 0.3);">NEW TENANT</div>
+    <h1 style="font-family: Georgia, serif; font-size: 26px; margin-top: 0; margin-bottom: 12px; color: #ffffff;">Payment Received</h1>
+    <p style="color: #cccccc; font-size: 14px; line-height: 1.6; margin-bottom: 24px;">
+      Congratulations ${agentName}! ${tenantName} has just successfully paid for <strong>${propertyTitle}</strong>.
+    </p>
+
+    <div style="background-color: #161616; border: 1px solid #282828; padding: 20px; text-align: center; margin-bottom: 24px;">
+      <p style="color: #888888; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 8px 0;">Total Property Value</p>
+      <p style="color: #10b981; font-size: 24px; font-weight: bold; margin: 0;">&#8358;${amount.toLocaleString()}</p>
+    </div>
+
+    <p style="color: #888888; font-size: 12px; line-height: 1.5;">
+      Your portion of the payment has been automatically routed to your connected Paystack subaccount. Log in to your Agent Dashboard to view the transaction details.
+    </p>
+
+    <a href="https://naijaspaces.app/dashboard" class="btn">View Agent Dashboard &rarr;</a>
   `;
   return wrapEmailLayout(content);
 }

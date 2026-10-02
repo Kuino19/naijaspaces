@@ -70,6 +70,19 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized. Only agents can list properties.' }, { status: 403 });
     }
 
+    const user = await prisma.user.findUnique({ where: { id: session.userId } });
+    if (!user) {
+      return NextResponse.json({ error: 'User not found.' }, { status: 404 });
+    }
+
+    const trialEnds = new Date(user.createdAt.getTime() + 30 * 24 * 60 * 60 * 1000);
+    const hasActiveSubscription = user.subscriptionEndsAt && new Date(user.subscriptionEndsAt) > new Date();
+    const isInTrial = !user.subscriptionEndsAt && trialEnds > new Date();
+
+    if (!hasActiveSubscription && !isInTrial) {
+      return NextResponse.json({ error: 'Trial expired. Please upgrade your account to continue listing properties.' }, { status: 402 });
+    }
+
     const data = await request.json();
     const images: string[] = Array.isArray(data.images) ? data.images.filter(Boolean) : [];
     const primaryImage = data.imageUrl || images[0] || "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80";

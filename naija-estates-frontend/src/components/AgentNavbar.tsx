@@ -13,12 +13,12 @@ export default function AgentNavbar() {
 
   return (
     <>
-      <header className="w-full z-50 px-6 py-5 flex justify-between items-center bg-[#0a0a0a]/95 backdrop-blur-md border-b border-white/10 sticky top-0">
+      <header className="w-full z-50 px-4 md:px-6 py-4 md:py-5 flex justify-between items-center bg-[#0a0a0a]/95 backdrop-blur-md border-b border-white/10 sticky top-0">
         <div className="flex items-center gap-4">
           <Link href="/for-agents" onClick={closeMobileMenu} className="text-xl font-bold tracking-widest uppercase flex items-center gap-2 hover:opacity-80 transition-opacity">
             <Building className="h-5 w-5 text-emerald-400" />
             <span>Naija<span className="font-light">Spaces</span></span>
-            <span className="text-[9px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded uppercase tracking-widest font-bold ml-1">
+            <span className="hidden md:inline-block text-[9px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded uppercase tracking-widest font-bold ml-1">
               Agent Partner
             </span>
           </Link>
@@ -32,7 +32,7 @@ export default function AgentNavbar() {
         </nav>
 
         {/* Action Controls for Agents */}
-        <div className="flex gap-4 text-xs font-medium tracking-widest uppercase items-center">
+        <div className="flex gap-2 md:gap-4 text-xs font-medium tracking-widest uppercase items-center">
           <LanguageSelector />
 
           <Link href="/login" className="hover:text-gray-300 transition-colors hidden sm:block text-gray-300">
@@ -41,7 +41,7 @@ export default function AgentNavbar() {
 
           <Link 
             href="/register/agent" 
-            className="bg-white text-black font-bold px-4 py-2 hover:bg-emerald-400 hover:text-black transition-all duration-300 flex items-center gap-1.5 text-[11px]"
+            className="bg-white text-black font-bold px-4 py-2 hover:bg-emerald-400 hover:text-black transition-all duration-300 hidden md:flex items-center gap-1.5 text-[11px]"
           >
             <Zap className="w-3.5 h-3.5 text-emerald-600 fill-emerald-600" /> Claim Free Month
           </Link>
@@ -49,7 +49,7 @@ export default function AgentNavbar() {
           {/* Mobile Hamburger Toggle */}
           <button 
             onClick={toggleMobileMenu}
-            className="md:hidden p-2 text-gray-300 hover:text-white transition-colors"
+            className="md:hidden p-1 md:p-2 text-gray-300 hover:text-white transition-colors"
             aria-label="Toggle agent menu"
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}

@@ -29,6 +29,18 @@ export default function PropertiesPage() {
   const itemsPerPage = 12;
 
   useEffect(() => {
+    // Parse URL params
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has("location")) setLocationQuery(params.get("location") || "");
+      if (params.has("type")) {
+        const type = params.get("type");
+        if (type === "apartment" || type === "house") setCategory("residential");
+        else if (type === "commercial" || type === "shop") setCategory("commercial");
+        else setCategory("all");
+      }
+    }
+
     // Load compared IDs from localStorage
     const compareStored = localStorage.getItem("naijaspaces_compare");
     if (compareStored) {

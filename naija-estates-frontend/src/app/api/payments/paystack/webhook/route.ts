@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import crypto from 'crypto';
-import { sendEmail, buildReceiptEmail } from '@/lib/email';
+import { sendEmail, buildReceiptEmail, buildAgentNotificationEmail } from '@/lib/email';
 
 export async function POST(request: Request) {
   try {
@@ -25,7 +25,9 @@ export async function POST(request: Request) {
         where: { reference },
         include: {
           user: true,
-          property: true
+          property: {
+            include: { agent: true }
+          }
         }
       });
 
@@ -40,7 +42,7 @@ export async function POST(request: Request) {
           data: { isAvailable: false }
         });
 
-        // Send payment receipt email
+        // Send payment receipt email to tenant
         if (payment.user?.email) {
           sendEmail({
             to: payment.user.email,
@@ -52,6 +54,20 @@ export async function POST(request: Request) {
               payment.reference
             )
           }).catch(err => console.error("Error sending payment receipt email:", err));
+        }
+
+        // Send notification email to Agent
+        if (payment.property.agent?.email) {
+          sendEmail({
+            to: payment.property.agent.email,
+            subject: `New Tenant Paid: ${payment.property.title}`,
+            html: buildAgentNotificationEmail(
+              payment.property.agent.name || 'Agent',
+              payment.property.title,
+              payment.amount,
+              payment.user?.name || 'A new tenant'
+            )
+          }).catch(err => console.error("Error sending agent notification email:", err));
         }
       }
     }
