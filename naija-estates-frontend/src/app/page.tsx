@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Search, ArrowRight, Play, Building, ChevronDown, MapPin, CheckCircle2, Globe, Star, Quote } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/LanguageContext";
+import Navbar from "@/components/Navbar";
 
 function RealisticVillaEmbed() {
   return (
@@ -66,36 +67,8 @@ export default function PristinePremiumHomePage() {
       {/* Subtle film grain overlay */}
       <div className="fixed inset-0 z-[1] pointer-events-none opacity-[0.03]" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E")`, backgroundSize: '128px 128px' }}></div>
       
-      {/* Header */}
-      <motion.header 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, ease: "easeOut" }}
-        className="fixed top-0 w-full z-50 px-6 py-6 flex justify-between items-center bg-[#0a0a0a]/60 backdrop-blur-lg border-b border-white/5"
-      >
-        <div className="text-xl font-bold tracking-widest uppercase flex items-center gap-2">
-          <Building className="h-5 w-5" />
-          <span>Naija<span className="font-light">Spaces</span></span>
-        </div>
-        <nav className="hidden md:flex gap-10 text-xs font-medium tracking-widest uppercase">
-          <Link href="/properties" className="hover:opacity-50 transition-opacity">Residences</Link>
-          <Link href="/compare" className="hover:opacity-50 transition-opacity">Compare</Link>
-          <Link href="/dashboard/tenant" className="hover:opacity-50 transition-opacity">Tenant Portal</Link>
-        </nav>
-        <div className="flex gap-4 text-xs font-medium tracking-widest uppercase items-center">
-          {/* Language Switcher */}
-          <button 
-            onClick={toggleLanguage}
-            className="flex items-center gap-1.5 px-3 py-1.5 border border-white/20 rounded-full hover:bg-white/10 transition-colors"
-          >
-            <Globe className="w-3.5 h-3.5 text-gray-400" />
-            <span className="text-gray-300 font-bold">{lang === 'en' ? 'ENG' : 'PIDGIN'}</span>
-          </button>
-
-          <Link href="/login" className="hover:opacity-50 transition-opacity hidden sm:block">Agent Login</Link>
-          <Link href="/dashboard" className="border border-white/20 px-4 py-2 hover:bg-white hover:text-black transition-all duration-300 hidden md:block">List Property</Link>
-        </div>
-      </motion.header>
+      {/* Navbar */}
+      <Navbar />
 
       <main>
         {/* ===== HERO SECTION ===== */}
