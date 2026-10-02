@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Building, Menu, X, Globe, LogIn, Heart, Layers, User, ArrowUpRight } from "lucide-react";
+import { Building, Menu, X, LogIn, Heart, Layers, ArrowUpRight } from "lucide-react";
 import { useLanguage } from "@/lib/LanguageContext";
+import LanguageSelector from "@/components/LanguageSelector";
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { lang, toggleLanguage, t } = useLanguage();
+  const { t } = useLanguage();
 
   const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
   const closeMobileMenu = () => setMobileMenuOpen(false);
@@ -32,15 +33,8 @@ export default function Navbar() {
 
         {/* Right Action Controls for Tenants */}
         <div className="flex gap-4 text-xs font-medium tracking-widest uppercase items-center">
-          {/* Language Switcher */}
-          <button 
-            onClick={toggleLanguage}
-            className="flex items-center gap-1.5 px-3 py-1.5 border border-white/20 rounded-full hover:bg-white/10 transition-colors"
-            title="Toggle English / Pidgin"
-          >
-            <Globe className="w-3.5 h-3.5 text-gray-400" />
-            <span className="text-gray-300 font-bold">{lang === 'en' ? 'ENG' : 'PIDGIN'}</span>
-          </button>
+          {/* Multi-Language Dropdown (ENG, PIDGIN, YORÙBÁ, IGBO, HAUSA) */}
+          <LanguageSelector />
 
           <Link href="/login" className="hover:text-gray-300 transition-colors hidden lg:block border-b border-white/20 pb-0.5">
             Sign In
@@ -68,8 +62,11 @@ export default function Navbar() {
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-40 bg-black/95 backdrop-blur-xl md:hidden flex flex-col justify-between p-8 pt-24 animate-in fade-in duration-200 overflow-y-auto">
           <div className="space-y-6">
-            <div className="text-[10px] uppercase tracking-[0.3em] text-gray-500 mb-6 border-b border-white/10 pb-3">
-              Explore NaijaSpaces
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
+              <span className="text-[10px] uppercase tracking-[0.3em] text-gray-500 font-bold">
+                Explore NaijaSpaces
+              </span>
+              <LanguageSelector />
             </div>
 
             <Link 

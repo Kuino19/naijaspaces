@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Building, Menu, X, ShieldCheck, LogIn, ArrowRight, Zap, ArrowUpRight } from "lucide-react";
+import { Building, Menu, X, ShieldCheck, LogIn, Zap, ArrowUpRight } from "lucide-react";
+import LanguageSelector from "@/components/LanguageSelector";
 
 export default function AgentNavbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -34,6 +35,8 @@ export default function AgentNavbar() {
 
         {/* Action Controls for Agents */}
         <div className="flex gap-4 text-xs font-medium tracking-widest uppercase items-center">
+          <LanguageSelector />
+
           <Link 
             href="/" 
             className="text-gray-400 hover:text-white transition-colors hidden xl:flex items-center gap-1 text-[11px] border-r border-white/10 pr-4"
@@ -71,9 +74,7 @@ export default function AgentNavbar() {
               <span className="text-[10px] uppercase tracking-[0.3em] text-emerald-400 font-bold">
                 Agent Partner Navigation
               </span>
-              <span className="text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded font-mono">
-                1st Month FREE
-              </span>
+              <LanguageSelector />
             </div>
 
             <Link 
