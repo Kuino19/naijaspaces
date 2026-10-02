@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Loader2, Eye, EyeOff, ShieldCheck, Zap } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
-import Navbar from "@/components/Navbar";
+import AgentNavbar from "@/components/AgentNavbar";
 
 export default function AgentRegisterPage() {
   const router = useRouter();
@@ -54,7 +54,7 @@ export default function AgentRegisterPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col selection:bg-white selection:text-black">
-      <Navbar />
+      <AgentNavbar />
 
       <main className="flex-1 flex items-center justify-center p-6 py-12">
         <div className="w-full max-w-lg bg-[#111] border border-white/10 p-10">

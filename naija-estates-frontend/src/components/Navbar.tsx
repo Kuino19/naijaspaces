@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Building, Menu, X, Globe, User, LogIn, Heart, Layers, Shield, UserPlus, ShieldCheck } from "lucide-react";
+import { Building, Menu, X, Globe, LogIn, Heart, Layers, User, ArrowUpRight } from "lucide-react";
 import { useLanguage } from "@/lib/LanguageContext";
 
 export default function Navbar() {
@@ -20,16 +20,17 @@ export default function Navbar() {
           <span>Naija<span className="font-light">Spaces</span></span>
         </Link>
 
-        {/* Desktop Nav Links */}
+        {/* Consumer / Tenant Desktop Nav Links */}
         <nav className="hidden md:flex gap-8 text-xs font-medium tracking-widest uppercase items-center">
           <Link href="/properties" className="hover:text-gray-400 transition-colors">Residences</Link>
-          <Link href="/for-agents" className="text-emerald-400 hover:text-emerald-300 transition-colors">For Agents</Link>
           <Link href="/compare" className="hover:text-gray-400 transition-colors">Compare</Link>
           <Link href="/dashboard/tenant" className="hover:text-gray-400 transition-colors">{t('tenantPortal')}</Link>
-          <Link href="/dashboard" className="hover:text-gray-400 transition-colors">{t('agentPortal')}</Link>
+          <Link href="/for-agents" className="text-emerald-400 hover:text-emerald-300 transition-colors flex items-center gap-1">
+            For Agents <ArrowUpRight className="w-3 h-3" />
+          </Link>
         </nav>
 
-        {/* Right Action Controls */}
+        {/* Right Action Controls for Tenants */}
         <div className="flex gap-4 text-xs font-medium tracking-widest uppercase items-center">
           {/* Language Switcher */}
           <button 
@@ -46,10 +47,10 @@ export default function Navbar() {
           </Link>
 
           <Link 
-            href="/register/agent" 
-            className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-4 py-2 hover:bg-emerald-500 hover:text-black transition-all duration-300 hidden sm:flex items-center gap-1.5 font-semibold text-[11px]"
+            href="/register" 
+            className="border border-white/20 px-4 py-2 hover:bg-white hover:text-black transition-all duration-300 hidden sm:block font-semibold"
           >
-            <ShieldCheck className="w-3.5 h-3.5" /> Agent Register
+            Create Account
           </Link>
 
           {/* Mobile Hamburger Toggle */}
@@ -63,12 +64,12 @@ export default function Navbar() {
         </div>
       </header>
 
-      {/* Mobile Drawer Menu Overlay */}
+      {/* Mobile Drawer Menu for Tenants */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-40 bg-black/95 backdrop-blur-xl md:hidden flex flex-col justify-between p-8 pt-24 animate-in fade-in duration-200 overflow-y-auto">
           <div className="space-y-6">
             <div className="text-[10px] uppercase tracking-[0.3em] text-gray-500 mb-6 border-b border-white/10 pb-3">
-              Navigation Menu
+              Explore NaijaSpaces
             </div>
 
             <Link 
@@ -77,14 +78,6 @@ export default function Navbar() {
               className="block text-2xl font-serif text-white hover:text-gray-400 transition-colors"
             >
               The Collection (Residences)
-            </Link>
-
-            <Link 
-              href="/for-agents" 
-              onClick={closeMobileMenu}
-              className="block text-xl font-serif text-emerald-400 hover:text-emerald-300 transition-colors"
-            >
-              For Agents (1st Month Free)
             </Link>
 
             <Link 
@@ -101,26 +94,17 @@ export default function Navbar() {
               onClick={closeMobileMenu}
               className="flex items-center justify-between text-xl font-serif text-gray-300 hover:text-white transition-colors"
             >
-              <span>Tenant Portal & Saved</span>
+              <span>Tenant Portal & Favorites</span>
               <Heart className="w-5 h-5 text-red-400" />
             </Link>
 
             <Link 
-              href="/dashboard" 
+              href="/for-agents" 
               onClick={closeMobileMenu}
-              className="flex items-center justify-between text-xl font-serif text-gray-300 hover:text-white transition-colors"
+              className="flex items-center justify-between text-xl font-serif text-emerald-400 hover:text-emerald-300 transition-colors pt-4 border-t border-white/10"
             >
-              <span>Agent Command Center</span>
-              <User className="w-5 h-5 text-gray-500" />
-            </Link>
-
-            <Link 
-              href="/admin" 
-              onClick={closeMobileMenu}
-              className="flex items-center justify-between text-xl font-serif text-gray-300 hover:text-white transition-colors"
-            >
-              <span>Admin Governance</span>
-              <Shield className="w-5 h-5 text-green-400" />
+              <span>Agent Partner Hub (1st Month Free)</span>
+              <ArrowUpRight className="w-5 h-5 text-emerald-400" />
             </Link>
           </div>
 
@@ -130,25 +114,16 @@ export default function Navbar() {
               onClick={closeMobileMenu}
               className="w-full border border-white/20 py-3.5 text-center block uppercase tracking-[0.2em] text-xs font-bold text-white hover:bg-white/10 transition-colors flex items-center justify-center gap-2"
             >
-              <LogIn className="w-4 h-4" /> Sign In (All Accounts)
+              <LogIn className="w-4 h-4" /> Sign In
             </Link>
 
-            <div className="grid grid-cols-2 gap-3">
-              <Link 
-                href="/register" 
-                onClick={closeMobileMenu}
-                className="w-full border border-white/30 text-white py-3 text-center block uppercase tracking-wider text-[11px] font-semibold hover:bg-white hover:text-black transition-colors"
-              >
-                Tenant Sign Up
-              </Link>
-              <Link 
-                href="/register/agent" 
-                onClick={closeMobileMenu}
-                className="w-full bg-emerald-500 text-black py-3 text-center block uppercase tracking-wider text-[11px] font-bold hover:bg-emerald-400 transition-colors"
-              >
-                Agent Register
-              </Link>
-            </div>
+            <Link 
+              href="/register" 
+              onClick={closeMobileMenu}
+              className="w-full bg-white text-black py-4 text-center block uppercase tracking-[0.2em] text-xs font-bold hover:bg-gray-200 transition-colors"
+            >
+              Create Account
+            </Link>
 
             <div className="text-center pt-3 text-[10px] uppercase tracking-widest text-gray-600">
               © {new Date().getFullYear()} NAIJASPACES. ALL RIGHTS RESERVED.
