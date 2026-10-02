@@ -28,7 +28,6 @@ export default function AgentNavbar() {
         <nav className="hidden lg:flex gap-6 text-[11px] font-semibold tracking-[0.15em] uppercase items-center text-gray-400">
           <Link href="/for-agents#features" className="hover:text-emerald-400 transition-colors">Features</Link>
           <Link href="/for-agents#pricing" className="hover:text-emerald-400 transition-colors">Pricing</Link>
-          <Link href="/dashboard" className="text-emerald-400 hover:text-emerald-300 transition-colors border border-emerald-500/30 px-3 py-1 rounded">Dashboard</Link>
         </nav>
 
         {/* Action Controls for Agents */}
@@ -92,14 +91,6 @@ export default function AgentNavbar() {
               How It Works & Traffic Setup
             </Link>
 
-            <Link 
-              href="/dashboard" 
-              onClick={closeMobileMenu}
-              className="flex items-center justify-between text-xl font-serif text-emerald-400 hover:text-emerald-300 transition-colors"
-            >
-              <span>Agent Command Center</span>
-              <ShieldCheck className="w-5 h-5 text-emerald-400" />
-            </Link>
 
             <Link 
               href="/" 
