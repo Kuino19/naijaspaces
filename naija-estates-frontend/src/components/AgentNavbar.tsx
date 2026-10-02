@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Building, Menu, X, ShieldCheck, LogIn, Zap, ArrowUpRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import LanguageSelector from "@/components/LanguageSelector";
 
 export default function AgentNavbar() {
@@ -48,7 +49,7 @@ export default function AgentNavbar() {
           {/* Mobile Hamburger Toggle */}
           <button 
             onClick={toggleMobileMenu}
-            className="md:hidden p-1 md:p-2 text-gray-300 hover:text-white transition-colors"
+            className="md:hidden p-1 md:p-2 text-gray-300 hover:text-white transition-colors relative z-50"
             aria-label="Toggle agent menu"
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -57,74 +58,75 @@ export default function AgentNavbar() {
       </header>
 
       {/* Mobile Drawer Menu for Agents */}
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-black/95 backdrop-blur-xl md:hidden flex flex-col justify-between p-8 pt-24 animate-in fade-in duration-200 overflow-y-auto">
-          <div className="space-y-6">
-            <div className="flex items-center justify-between border-b border-white/10 pb-3">
-              <span className="text-[10px] uppercase tracking-[0.3em] text-emerald-400 font-bold">
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="fixed inset-0 z-40 bg-black/95 backdrop-blur-xl md:hidden flex flex-col justify-between p-8 pt-28 overflow-y-auto"
+          >
+            <div className="space-y-8">
+              <span className="text-[10px] uppercase tracking-[0.3em] text-emerald-400 font-bold border-b border-white/10 pb-4 block">
                 Agent Partner Navigation
               </span>
-              <LanguageSelector />
+
+              <Link 
+                href="/for-agents#features" 
+                onClick={closeMobileMenu}
+                className="block text-xl uppercase tracking-wider font-semibold text-gray-300 hover:text-emerald-400 transition-colors"
+              >
+                Why Partner With Us
+              </Link>
+
+              <Link 
+                href="/for-agents#pricing" 
+                onClick={closeMobileMenu}
+                className="block text-xl uppercase tracking-wider font-semibold text-gray-300 hover:text-emerald-400 transition-colors"
+              >
+                Pricing & Fees
+              </Link>
+
+              <Link 
+                href="/for-agents#how-it-works" 
+                onClick={closeMobileMenu}
+                className="block text-xl uppercase tracking-wider font-semibold text-gray-300 hover:text-emerald-400 transition-colors"
+              >
+                How It Works
+              </Link>
+
+
+              <Link 
+                href="/" 
+                onClick={closeMobileMenu}
+                className="flex items-center gap-4 text-xs uppercase tracking-[0.2em] font-bold text-gray-500 hover:text-white transition-colors pt-6 border-t border-white/10"
+              >
+                Switch to Tenant Site
+                <ArrowUpRight className="w-4 h-4" />
+              </Link>
             </div>
 
-            <Link 
-              href="/for-agents#features" 
-              onClick={closeMobileMenu}
-              className="block text-2xl font-serif text-white hover:text-emerald-400 transition-colors"
-            >
-              Why Partner With Us
-            </Link>
+            <div className="space-y-4 pt-8">
+              <Link 
+                href="/login" 
+                onClick={closeMobileMenu}
+                className="w-full border border-white/20 py-4 text-center block uppercase tracking-[0.2em] text-xs font-bold text-white hover:bg-white/10 transition-colors flex items-center justify-center gap-2"
+              >
+                <LogIn className="w-4 h-4" /> Agent Sign In
+              </Link>
 
-            <Link 
-              href="/for-agents#pricing" 
-              onClick={closeMobileMenu}
-              className="block text-xl font-serif text-emerald-400 hover:text-emerald-300 transition-colors"
-            >
-              Pricing (₦1,500/mo & 5% Sales Cut)
-            </Link>
-
-            <Link 
-              href="/for-agents#how-it-works" 
-              onClick={closeMobileMenu}
-              className="block text-xl font-serif text-gray-300 hover:text-white transition-colors"
-            >
-              How It Works & Traffic Setup
-            </Link>
-
-
-            <Link 
-              href="/" 
-              onClick={closeMobileMenu}
-              className="flex items-center justify-between text-lg font-serif text-gray-400 hover:text-white transition-colors pt-2 border-t border-white/10"
-            >
-              <span>Switch to Tenant / Buyer Site</span>
-              <ArrowUpRight className="w-4 h-4 text-gray-500" />
-            </Link>
-          </div>
-
-          <div className="space-y-3 pt-6 border-t border-white/10 my-4">
-            <Link 
-              href="/login" 
-              onClick={closeMobileMenu}
-              className="w-full border border-white/20 py-3.5 text-center block uppercase tracking-[0.2em] text-xs font-bold text-white hover:bg-white/10 transition-colors flex items-center justify-center gap-2"
-            >
-              <LogIn className="w-4 h-4" /> Agent Sign In
-            </Link>
-
-            <Link 
-              href="/register/agent" 
-              onClick={closeMobileMenu}
-              className="w-full bg-emerald-500 text-black py-4 text-center block uppercase tracking-[0.2em] text-xs font-bold hover:bg-emerald-400 transition-colors flex items-center justify-center gap-2"
-            >
-              <Zap className="w-4 h-4 fill-black" /> Claim 1st Month Free & Register
-            </Link>
-
-            <div className="text-center pt-3 text-[10px] uppercase tracking-widest text-gray-600">
-              © {new Date().getFullYear()} NAIJASPACES AGENT PARTNERSHIP.
+              <Link 
+                href="/register/agent" 
+                onClick={closeMobileMenu}
+                className="w-full bg-emerald-500 text-black py-4 text-center block uppercase tracking-[0.2em] text-xs font-bold hover:bg-emerald-400 transition-colors flex items-center justify-center gap-2"
+              >
+                <Zap className="w-4 h-4 fill-black" /> Register & Claim Free Month
+              </Link>
             </div>
-          </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
