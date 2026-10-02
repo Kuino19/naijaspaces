@@ -49,6 +49,11 @@ const translations: Record<Language, Record<string, string>> = {
     agentPortal: "Agent Portal",
     tenantPortal: "Tenant Dashboard",
     testimonialsTitle: "What People Say",
+    agentHeroTitle: "List your portfolio.",
+    agentHeroSubtitle: "Close deals faster.",
+    agentHeroDesc: "Join Nigeria's most exclusive real estate network. Connect directly with high-budget tenants and buyers across Lagos, Abuja, and Port Harcourt.",
+    claimFreeMonth: "Claim Free Month",
+    viewPricing: "View Pricing & 5% Cut",
   },
   pidgin: {
     heroTitle: "Fine Houses for Naija, Simplified.",
@@ -72,6 +77,11 @@ const translations: Record<Language, Record<string, string>> = {
     agentPortal: "Agent Portal",
     tenantPortal: "Tenant Dashboard",
     testimonialsTitle: "Wetin People Talk",
+    agentHeroTitle: "Post your houses.",
+    agentHeroSubtitle: "Sell dem sharp sharp.",
+    agentHeroDesc: "Join the biggest agent network for Naija. Connect direct with people wey get money for Lagos, Abuja, and Port Harcourt.",
+    claimFreeMonth: "Collect Awoof Month",
+    viewPricing: "See Pricing & 5% Cut",
   },
   yo: {
     heroTitle: "Awọn Ilé Aláradagba Ní Nàìjíríà.",
@@ -95,6 +105,11 @@ const translations: Record<Language, Record<string, string>> = {
     agentPortal: "Kọmputa Agbeṣẹ́",
     tenantPortal: "Kọmputa Alábàáwọlé",
     testimonialsTitle: "Erò Awọn Oníbàárà",
+    agentHeroTitle: "Fi awọn ilé rẹ sori ayelujara.",
+    agentHeroSubtitle: "Ta wọn ni kope kope.",
+    agentHeroDesc: "Darapọ mọ ẹgbẹ awọn aṣoju ile ti o tobi julọ ni Naijiria. Sopọ pẹlu awọn ti o ni owo ni Eko, Abuja, ati Port Harcourt.",
+    claimFreeMonth: "Gba Osu Kan Ọfẹ",
+    viewPricing: "Wo Iye Owo & 5%",
   },
   ig: {
     heroTitle: "Ụlọ Obibi na azụmahịa kachasị mma na Naịjirịa.",
@@ -118,6 +133,11 @@ const translations: Record<Language, Record<string, string>> = {
     agentPortal: "Pọtụlụ Agent",
     tenantPortal: "Pọtụlụ Onye Rente",
     testimonialsTitle: "Ihe Ndị Mmadụ Na-ekwu",
+    agentHeroTitle: "Debe ụlọ gị na ịntanetị.",
+    agentHeroSubtitle: "Ree ha ngwa ngwa.",
+    agentHeroDesc: "Soro netwọkụ ndị ọrụ ụlọ kacha ukwuu na Naịjirịa. Jikọọ na ndị nwere ego na Lagos, Abuja, na Port Harcourt.",
+    claimFreeMonth: "Nata Otu Ọnwa N'efu",
+    viewPricing: "Hụ Ọnụahịa & 5%",
   },
   ha: {
     heroTitle: "Kayan Gida da Gidaje Mafi Inganci a Nijeriya.",
@@ -141,6 +161,11 @@ const translations: Record<Language, Record<string, string>> = {
     agentPortal: "Manhajar Dilalai",
     tenantPortal: "Manhajar Masu Haya",
     testimonialsTitle: "Cewar Abokan Ciniki",
+    agentHeroTitle: "Sa gidajen ka a yanar gizo.",
+    agentHeroSubtitle: "Sayar da su da sauri.",
+    agentHeroDesc: "Shiga babbar hanyar sadarwa ta dillalan gidaje a Najeriya. Haɗu da masu kudi a Legas, Abuja, da Fatakwal.",
+    claimFreeMonth: "Karbi Wata Daya Kyauta",
+    viewPricing: "Duba Farashi da 5%",
   }
 };
 

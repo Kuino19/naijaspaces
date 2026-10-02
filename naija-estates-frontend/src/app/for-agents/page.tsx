@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowRight, ShieldCheck, Zap, MessageSquare, TrendingUp, CheckCircle2, DollarSign, Award, Users, HelpCircle, ChevronRight, Check } from "lucide-react";
 import AgentNavbar from "@/components/AgentNavbar";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/lib/LanguageContext";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -19,6 +20,8 @@ const staggerContainer = {
 };
 
 export default function ForAgentsLandingPage() {
+  const { t } = useLanguage();
+
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-white selection:text-black scroll-smooth">
       <AgentNavbar />
@@ -42,12 +45,12 @@ export default function ForAgentsLandingPage() {
               </motion.div>
 
               <motion.h1 variants={fadeUp} className="text-5xl sm:text-7xl lg:text-[5.5rem] font-serif leading-[1.02] tracking-tight mb-8 text-white">
-                List your portfolio. <br />
-                <span className="italic font-light text-emerald-400">Close deals faster.</span>
+                {t('agentHeroTitle')} <br />
+                <span className="italic font-light text-emerald-400">{t('agentHeroSubtitle')}</span>
               </motion.h1>
 
               <motion.p variants={fadeUp} className="text-gray-400 text-lg sm:text-xl font-light leading-relaxed mb-12 max-w-xl">
-                Join Nigeria's most exclusive real estate network. Connect directly with high-budget tenants and buyers across Lagos, Abuja, and Port Harcourt.
+                {t('agentHeroDesc')}
               </motion.p>
 
               <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-5 items-stretch sm:items-center">
@@ -56,13 +59,13 @@ export default function ForAgentsLandingPage() {
                   className="group relative bg-emerald-500 text-black px-8 py-5 text-center text-xs font-bold uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 overflow-hidden rounded-sm"
                 >
                   <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
-                  <span className="relative z-10 flex items-center gap-2">Claim Free Month <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" /></span>
+                  <span className="relative z-10 flex items-center gap-2">{t('claimFreeMonth')} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" /></span>
                 </Link>
                 <Link 
                   href="#pricing" 
                   className="border border-white/20 text-white px-8 py-5 text-center text-xs uppercase tracking-[0.2em] font-medium hover:bg-white hover:text-black transition-colors rounded-sm"
                 >
-                  View Pricing & 5% Cut
+                  {t('viewPricing')}
                 </Link>
               </motion.div>
             </motion.div>
@@ -109,7 +112,7 @@ export default function ForAgentsLandingPage() {
                       <CheckCircle2 className="w-5 h-5 text-blue-400" />
                     </div>
                     <div className="pt-1">
-                      <h4 className="text-lg font-serif text-white leading-tight">Paystack Commission</h4>
+                      <h4 className="text-lg font-serif text-white leading-tight">NaijaSpaces Commission</h4>
                       <p className="text-sm text-gray-400 font-light mt-1">We add a 5% platform fee on top of your asking price.</p>
                     </div>
                   </div>
