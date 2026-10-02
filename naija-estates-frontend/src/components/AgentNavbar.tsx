@@ -25,12 +25,12 @@ export default function AgentNavbar() {
         </div>
 
         {/* Dedicated Desktop Agent Navigation */}
-        <nav className="hidden md:flex gap-8 text-xs font-medium tracking-widest uppercase items-center text-gray-300">
-          <Link href="/for-agents#features" className="hover:text-emerald-400 transition-colors">Why Partner</Link>
-          <Link href="/for-agents#pricing" className="hover:text-emerald-400 transition-colors">Pricing & 5% Cut</Link>
+        <nav className="hidden lg:flex gap-8 text-[11px] font-semibold tracking-[0.15em] uppercase items-center text-gray-400">
+          <Link href="/for-agents#features" className="hover:text-emerald-400 transition-colors">Features</Link>
+          <Link href="/for-agents#pricing" className="hover:text-emerald-400 transition-colors">Pricing</Link>
           <Link href="/for-agents#how-it-works" className="hover:text-emerald-400 transition-colors">How It Works</Link>
           <Link href="/for-agents#faq" className="hover:text-emerald-400 transition-colors">FAQ</Link>
-          <Link href="/dashboard" className="text-emerald-400 hover:text-emerald-300 transition-colors font-bold">My Dashboard</Link>
+          <Link href="/dashboard" className="text-emerald-400 hover:text-emerald-300 transition-colors border border-emerald-500/30 px-3 py-1 rounded">Dashboard</Link>
         </nav>
 
         {/* Action Controls for Agents */}
@@ -39,9 +39,9 @@ export default function AgentNavbar() {
 
           <Link 
             href="/" 
-            className="text-gray-400 hover:text-white transition-colors hidden xl:flex items-center gap-1 text-[11px] border-r border-white/10 pr-4"
+            className="text-gray-500 hover:text-white transition-colors hidden xl:flex items-center gap-1 text-[11px] border-r border-white/10 pr-4"
           >
-            Tenant Website <ArrowUpRight className="w-3.5 h-3.5 text-gray-500" />
+            Tenant Site <ArrowUpRight className="w-3 h-3" />
           </Link>
 
           <Link href="/login" className="hover:text-gray-300 transition-colors hidden sm:block text-gray-300">
