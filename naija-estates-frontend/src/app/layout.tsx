@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { LanguageProvider } from "@/lib/LanguageContext";
 
@@ -58,6 +59,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </LanguageProvider>
       </body>
+      <Script src="https://scripts.simpleanalyticscdn.com/latest.js" />
     </html>
   );
 }
